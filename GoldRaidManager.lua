@@ -2049,20 +2049,20 @@ function GRM_BriefPriorGoldOnClick()
 	local zonetext = GetZoneText();
 	local msgtail = GRM_locale.BriefMsgLine;
 	local msgHdr = GRM_locale.BriefMsgPrefix .. zonetext .. GRM_locale.BriefMsgPriorPostfix .. msgtail;
-	local msg = "뒷거래 1회당 ["..GRM_RaceOption["GoldPerDeal"].."] 골\n"..msgtail;
+	local msg = "Per Deal ["..GRM_RaceOption["GoldPerDeal"].."] gold\n"..msgtail;
 	local dealCount = 0;
 	local player, priorInfo;
 	for player, priorInfo in pairs(GRM_PriorList) do
 		if ( priorInfo and priorInfo.count ) then
 			dealCount = dealCount + priorInfo.count;
-			msg = msg..GRM_GetGrayName(player)..": "..priorInfo.count.."회 = "..GRM_RaceOption["GoldPerDeal"] * tonumber(priorInfo.count).."\n";
+			msg = msg..GRM_GetGrayName(player)..": "..priorInfo.count.." Deals = "..GRM_RaceOption["GoldPerDeal"] * tonumber(priorInfo.count).."\n";
 		end
 	end
 
 	local totalGold = GRM_RaceOption["GoldPerDeal"] * dealCount;
 	local MemberNum = 0;
 
-	msg = msg..GRM_locale.BriefMsgSingleLine.."합계: "..totalGold.."\n";
+	msg = msg..GRM_locale.BriefMsgSingleLine.."Sum: "..totalGold.."\n";
 
 	if ( UnitInRaid("player") ) then
 		MemberNum = GetNumRaidMembers();
@@ -2074,7 +2074,7 @@ function GRM_BriefPriorGoldOnClick()
 
 	-- 무득자 카운트 No-winner count
 	local i, j;
-	local LootPlayers = "아이템 획득자: "
+	local LootPlayers = "Players who earned items: "
 	local LootCount = 0;
 	for i=1,5 do
 		for j=1,5 do
@@ -2088,7 +2088,7 @@ function GRM_BriefPriorGoldOnClick()
 		end
 	end	
 	if ( LootCount > 0 ) then
-		msg = msg..LootPlayers.."("..LootCount.."명), 무득: "..MemberNum-LootCount.."명\n";
+		msg = msg..LootPlayers.."("..LootCount.."players), no profit: "..MemberNum-LootCount.."players\n";
 		MemberNum = MemberNum - LootCount;
 	end
 
@@ -2100,7 +2100,7 @@ function GRM_BriefPriorGoldOnClick()
 		GoldFormat = "%d";
 	end
 
-	msg = msg .. msgtail .. "총 획득 골드(".. MemberNum .. "명): " .. totalGold .. "골드\n";
+	msg = msg .. msgtail .. "Total Gold Earned(".. MemberNum .. "players): " .. totalGold .. "gold\n";
 	msg = msg .. "1 명당 " .. string.format(GoldFormat, EachGold) .. "골\n";
 
 	-- 무득골팟 아니면 파티당 골드 계산 Unincorporated gold pod or gold per party
