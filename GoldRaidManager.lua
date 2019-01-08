@@ -1969,7 +1969,7 @@ end
 function GRM_BriefPriorItemEntryOnClick()
 --------------------------------------------------------------
 	if ( not GRM_PriorList ) then
-		GRM_SystemChat("선입 내역이 없습니다");
+		GRM_SystemChat("There are no reserved items");
 		return;
 	end
 
@@ -1990,9 +1990,9 @@ function GRM_BriefPriorItemEntryOnClick()
 	end
 
 	if ( UnitInRaid("player") ) then
-		GRM_RaidChat("◐ 선입 내역(아이템별) ◑", "RAID");
+		GRM_RaidChat("{star} Reserved Items (by item):", "RAID");
 	else
-		GRM_SystemChat("◐ 선입 내역(아이템별) ◑");
+		GRM_SystemChat("Reserved Items:");
 	end
 
 	local item, players;
@@ -2009,13 +2009,13 @@ end
 function GRM_BriefPriorEntryOnClick()
 --------------------------------------------------------------
 	if ( not GRM_PriorList ) then
-		GRM_SystemChat("선입 내역이 없습니다");
+		GRM_SystemChat("There are no reserved items");
 		return;
 	end
 	if ( UnitInRaid("player") ) then
-		GRM_RaidChat("◐ 선입 내역(유저별) ◑", "RAID");
+		GRM_RaidChat("{star} Reserved Items (by player):", "RAID");
 	else
-		GRM_SystemChat("◐ 선입 내역(유저별) ◑");
+		GRM_SystemChat("Reserved Items (by player):");
 	end	
 
 	local player, priorInfo;
