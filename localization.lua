@@ -3,9 +3,9 @@ GRM_AUTHOR							= "Author: Sharha (Horde) [KR-Stormrage] // Translator: Onehan 
 
 -- 단축키
 BINDING_NAME_GRM					= "Show/Hide";
-BINDING_HEADER_GRM_HEADER			= "Gold Raid Manager 3.3.x";
+BINDING_HEADER_GRM_HEADER			= "Gold Raid Manager 2.4.3";
 
-GRM_TITLENAME						= "Gold Raid Manager 3.3.x";
+GRM_TITLENAME						= "Gold Raid Manager 2.4.3";
 GRM_ICON							= "Interface\\AddOns\\GoldRaidManager\\images\\Icon";
 
 -- 브리핑 미리 입력한 내용
