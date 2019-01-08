@@ -1,0 +1,5 @@
+<Bindings>
+	<Binding name="GRM" header="GRM_HEADER">
+		GRM_MainFrame_Toggle();
+	</Binding>
+</Bindings>

@@ -1,0 +1,2570 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+	<Script	file="GoldRaidManager.lua"/>
+	<Script file="MyMinimapButton.lua"/>
+	<Script	file="localization.lua"/>
+	
+<!-- 메인 프레임 시작 Start mainframe -->
+	<Frame name="GRM_MainFrame" toplevel="true" parent="UIParent" enableMouse="true" movable="true" hidden="false">
+		<Size>
+			<AbsDimension x="590" y="520"/>
+		</Size>
+		<Anchors>
+			<Anchor point="CENTER" relativeTo="UIParent" relativePoint="CENTER"/>
+		</Anchors>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<BackgroundInsets>
+				<AbsInset left="4" right="4" top="4" bottom="4" />
+			</BackgroundInsets>
+			<TileSize>
+				<AbsValue val="16" />
+			</TileSize>
+			<EdgeSize>
+				<AbsValue val="16" />
+			</EdgeSize>
+		</Backdrop>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture name="$parentLogo" file="Interface\AddOns\GoldRaidManager\images\Icon">
+					<Size>
+						<AbsDimension x="20" y="20"/>
+					</Size>
+					<Anchors><Anchor point="TOPLEFT">
+						<Offset><AbsDimension x="10" y="-10"/></Offset>
+					</Anchor></Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BORDER">
+				<Texture file="Interface\ChatFrame\ChatFrameBackground">
+					<Anchors>
+						<Anchor point="TOPLEFT">
+							<Offset><AbsDimension x="5" y="-5"/></Offset>
+						</Anchor>
+						<Anchor point="BOTTOMRIGHT" relativeTo="$parent" relativePoint="TOPRIGHT">
+							<Offset><AbsDimension x="-5" y="-50"/></Offset>
+						</Anchor>
+					</Anchors>
+					<Gradient orientation="VERTICAL">
+						<MinColor r="0.1" g="0.1" b="0.1" a="0"/>
+						<MaxColor r=".25" g=".25" b=".25" a="1"/>
+					</Gradient>
+				</Texture>
+				<Texture file="Interface\ChatFrame\ChatFrameBackground">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="BOTTOMLEFT">
+							<Offset><AbsDimension x="5" y="50"/></Offset>
+						</Anchor>
+						<Anchor point="BOTTOMRIGHT">
+							<Offset><AbsDimension x="-5" y="5"/></Offset>
+						</Anchor>
+					</Anchors>
+					<Gradient orientation="VERTICAL">
+						<MinColor r=".20" g=".20" b=".20" a="1"/>
+						<MaxColor r="0.1" g="0.1" b="0.1" a="0"/>
+						
+					</Gradient>
+				</Texture>
+			</Layer>
+
+            <!-- 버전 텍스트 Version text -->
+			<Layer level="ARTWORK">
+				<FontString name="$parentText1" inherits="GRM_FontTemplate" text="GRM_TITLENAME">
+					<Anchors><Anchor point="TOP">
+						<Offset><AbsDimension x="0" y="-10"/></Offset>
+					</Anchor></Anchors>
+				</FontString>
+				<FontString name="$parentText2" inherits="GameFontNormalSmall" text="GRM_VERSION">
+					<Anchors><Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
+						<Offset><AbsDimension x="-20" y="-45"/></Offset>
+					</Anchor></Anchors>
+					<Color r="0" g="1" b="0.5"/>
+				</FontString>
+				<FontString name="$parentText3" inherits="GameFontNormalSmall" text="GRM_AUTHOR">
+					<Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">
+						<Offset><AbsDimension x="-20" y="5"/></Offset>
+					</Anchor></Anchors>
+					<Color r="0" g="1" b="0.5"/>
+				</FontString>
+			</Layer>
+
+            <!-- 탭 라인 Tap line -->
+            <Layer level="BORDER">
+                <Texture name="$parentLine" file="Interface\AddOns\GoldRaidManager\images\line">
+                    <Size>
+                        <AbsDimension x="256" y="64"/>
+                    </Size>
+        			<Anchors>
+        				<Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="5" y="-30"/></Offset>
+						</Anchor>
+        				<Anchor point="TOPRIGHT" relativeTo="$parent" relativePoint="TOPRIGHT">
+							<Offset><AbsDimension x="-5" y="-30"/></Offset>
+						</Anchor>
+        			</Anchors>
+                    <TexCoords left="0" right="1" top="0" bottom="1"/>
+                </Texture>
+            </Layer>			
+		</Layers>
+
+		<Frames>
+		    <!-- 닫기 버튼 Close button -->
+			<Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+				<Anchors>
+					<Anchor point="TOPRIGHT" relativePoint="TOPRIGHT"/>
+				</Anchors>
+			</Button>
+
+			<!-- 1 페이지 Page 1 -->
+            <Frame name="GRM_Tab1" hidden="false" >	
+                <Frames>
+					
+					<!-- 항목(네임드) 텍스트 -->
+                    <Frame name="GRM_NamedListHeader" inherits="GRM_HeaderTemplate">    
+                        <Scripts>
+							<OnLoad>
+								GRM_Header_OnLoad(10,-75);
+							</OnLoad>
+						</Scripts>
+                    </Frame>
+
+					<!-- 항목 리스트 프레임 -->
+					<Frame name="GRM_NamedListFrame" hidden="false">
+						<Size>
+							<AbsDimension x="210" y="170"/>
+						</Size>
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedListHeaderText" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="0" y="-30" /></Offset>
+						</Anchor></Anchors>
+						<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+							<BackgroundInsets>
+								<AbsInset left="4" right="4" top="4" bottom="4"/>
+							</BackgroundInsets>
+							<TileSize>
+								<AbsValue val="16"/>
+							</TileSize>
+							<EdgeSize>
+								<AbsValue val="16"/>
+							</EdgeSize>
+						</Backdrop>
+						<Frames>
+							<!-- 스크롤 프레임 -->
+							<ScrollFrame name="GRM_NamedList_ScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
+								<Anchors>
+									<Anchor point="TOPLEFT">
+										<Offset><AbsDimension x="0" y="-8"/></Offset>
+									</Anchor>
+									<Anchor point="BOTTOMRIGHT">
+										<Offset><AbsDimension x="-30" y="8"/></Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnVerticalScroll>
+									  FauxScrollFrame_OnVerticalScroll(self, offset, 16, GRM_NamedList_ScrollBar_Update)
+<!--										FauxScrollFrame_OnVerticalScroll( 16, GRM_NamedList_ScrollBar_Update ); -->
+									</OnVerticalScroll>
+									<OnShow>
+										GRM_NamedList_ScrollBar_Update();
+									</OnShow>
+								</Scripts>
+							</ScrollFrame>
+							
+							<!-- 리스트 항목 -->
+							<Button name="GRM_NamedList_Entry1" inherits="GRM_MainList_Template" id="1">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedList_ScrollBar" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="8" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_NamedList_Entry2" inherits="GRM_MainList_Template" id="2">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_NamedList_Entry1" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_NamedList_Entry3" inherits="GRM_MainList_Template" id="3">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_NamedList_Entry2" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_NamedList_Entry4" inherits="GRM_MainList_Template" id="4">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_NamedList_Entry3" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_NamedList_Entry5" inherits="GRM_MainList_Template" id="5">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_NamedList_Entry4" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_NamedList_Entry6" inherits="GRM_MainList_Template" id="6">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_NamedList_Entry5" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_NamedList_Entry7" inherits="GRM_MainList_Template" id="7">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_NamedList_Entry6" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_NamedList_Entry8" inherits="GRM_MainList_Template" id="8">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_NamedList_Entry7" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+						</Frames>
+					</Frame>
+
+					<!-- 옵션 프레임 -->
+                    <Frame name="GRM_OptionHeader" inherits="GRM_HeaderTemplate">    
+                        <Scripts>
+							<OnLoad>
+								GRM_Header_OnLoad(10,-285);
+							</OnLoad>
+						</Scripts>
+                    </Frame>
+
+					<Frame name="GRM_OptionFrame" hidden="false">
+						<Size>
+							<AbsDimension x="210" y="190"/>
+						</Size>
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_OptionHeaderText" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="0" y="-30" /></Offset>
+						</Anchor></Anchors>
+						<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+							<BackgroundInsets>
+								<AbsInset left="4" right="4" top="4" bottom="4"/>
+							</BackgroundInsets>
+							<TileSize>
+								<AbsValue val="16"/>
+							</TileSize>
+							<EdgeSize>
+								<AbsValue val="16"/>
+							</EdgeSize>
+						</Backdrop>
+						<Layers>
+							<Layer level="OVERLAY">
+								<FontString name="$parentAuctionMineGoldText" inherits="GameFontNormal">
+									<Anchors><Anchor point="TOPLEFT">
+										<Offset><AbsDimension x="90" y="15"/></Offset>
+									</Anchor></Anchors>
+									<Color r="1.0" g="1.0" b="0.2"/>
+								</FontString>
+
+								<FontString name="$parentStartGoldText" inherits="GameFontNormal">
+									<Anchors><Anchor point="BOTTOMLEFT">
+										<Offset><AbsDimension x="20" y="15"/></Offset>
+									</Anchor></Anchors>
+									<Color r="1.0" g="1.0" b="0.2"/>
+								</FontString>
+								<Texture name="$parentGoldIcon" file="Interface\MoneyFrame\UI-MoneyIcons">
+									<Size><AbsDimension x="12" y="12"/></Size>
+									<Anchors><Anchor point="LEFT" relativeTo="$parentStartGoldText" relativePoint="RIGHT">
+										<Offset><AbsDimension x="3" y="0"/></Offset>
+									</Anchor></Anchors>
+									<TexCoords left="0" right="0.25" top="0" bottom="1"/>
+								</Texture>
+								<FontString name="$parentPlusGoldText" inherits="GameFontNormal">
+									<Anchors><Anchor point="LEFT" relativeTo="$parentStartGoldText" relativePoint="RIGHT">
+										<Offset><AbsDimension x="70" y="0"/></Offset>
+									</Anchor></Anchors>
+									<Color r="0.2" g="1.0" b="1.0"/>
+								</FontString>
+								<Texture name="$parentGoldIcon" file="Interface\MoneyFrame\UI-MoneyIcons">
+									<Size><AbsDimension x="12" y="12"/></Size>
+									<Anchors><Anchor point="LEFT" relativeTo="$parentPlusGoldText" relativePoint="RIGHT">
+										<Offset><AbsDimension x="3" y="0"/></Offset>
+									</Anchor></Anchors>
+									<TexCoords left="0" right="0.25" top="0" bottom="1"/>
+								</Texture>								
+							</Layer>								
+							<Layer>
+								<!-- 스태틱 레이블 -->
+								<FontString name="GRM_Start_Label" inherits="GameFontNormal" text="Start">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_OptionFrame" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="85" y="-17" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_Race_Label" inherits="GameFontNormal" text="Raise">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Start_Label" relativePoint="TOPRIGHT">
+										<Offset><AbsDimension x="25" y="0" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_Normal_Label" inherits="GameFontNormal" text="Epic">
+									<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_Start_Label" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="-45" y="-25" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_Token_Label" inherits="GameFontNormal" text="Token">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Normal_Label" relativePoint="BOTTOMLEFT">
+										<Offset><AbsDimension x="0" y="-10" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_Count_Label" inherits="GameFontNormal" text="Count">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Token_Label" relativePoint="BOTTOMLEFT">
+										<Offset><AbsDimension x="0" y="-15" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_GoldArrow_Label" inherits="GameFontNormal" text="→">
+									<Anchors><Anchor point="LEFT" relativeTo="$parentGoldIcon" relativePoint="RIGHT">
+										<Offset><AbsDimension x="20" y="0" /></Offset>
+									</Anchor></Anchors>
+								</FontString>								
+							</Layer>
+						</Layers>
+						<Frames>
+							<Button name="GRM_ReloadUI_Button" inherits="OptionsButtonTemplate" text="Save">
+								<Size>
+									<AbsDimension x="70" y="28"/>
+								</Size>
+    						<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_NamedListHeaderText" relativePoint="TOPRIGHT">
+    							<Offset><AbsDimension x="75" y="0" /></Offset>
+    						</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_ShowReload();
+									</OnClick>
+								</Scripts>
+							</Button>
+
+							<Button name="GRM_ItemRule_Button" inherits="OptionsButtonTemplate" text="RULE">
+								<Size>
+									<AbsDimension x="70" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Start_Label" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="-80" y="10"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_ItemRuleBriefing();
+									</OnClick>
+								</Scripts>
+							</Button>
+
+							<EditBox name="GRM_Normal_Start_Edit" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Normal_Label" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="60" y="3"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										GRM_Normal_Race_Edit:SetFocus();
+        						    </OnTabPressed>
+									<OnEditFocusLost>
+										this:HighlightText(0, 0);
+										GRM_RaceOption["NormalStart"] = tonumber(this:GetText());
+									</OnEditFocusLost>
+        						</Scripts>
+							</EditBox>
+							<EditBox name="GRM_Token_Start_Edit" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Token_Label" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="60" y="3"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										GRM_Token_Race_Edit:SetFocus();
+        						    </OnTabPressed>
+									<OnEditFocusLost>
+										this:HighlightText(0, 0);
+										GRM_RaceOption["TokenStart"] = tonumber(this:GetText());
+									</OnEditFocusLost>
+        						</Scripts>
+							</EditBox>
+							<EditBox name="GRM_Count_Edit" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Count_Label" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="60" y="3"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										GRM_Normal_Start_Edit:SetFocus();
+        						    </OnTabPressed>
+									<OnEditFocusLost>
+										this:HighlightText(0, 0);
+										GRM_RaceOption["Count"] = tonumber(this:GetText());
+									</OnEditFocusLost>
+        						</Scripts>
+							</EditBox>
+							
+							<CheckButton name="GRM_Check_AuctionAllbun" inherits="GRM_CheckButtonTemplate">	
+             		<Anchors><Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" relativeTo="GRM_Count_Edit">
+     		        	<Offset><AbsDimension x="30" y="0"/></Offset>
+								</Anchor></Anchors>
+              </CheckButton>
+
+							<EditBox name="GRM_Normal_Race_Edit" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Normal_Start_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="15" y="0"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										GRM_Token_Start_Edit:SetFocus();
+        						    </OnTabPressed>
+									<OnEditFocusLost>
+										this:HighlightText(0, 0);
+										GRM_RaceOption["NormalRace"] = tonumber(this:GetText());
+									</OnEditFocusLost>
+        						</Scripts>
+							</EditBox>
+							<EditBox name="GRM_Token_Race_Edit" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Token_Start_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="15" y="0"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										GRM_Count_Edit:SetFocus();
+        						    </OnTabPressed>
+									<OnEditFocusLost>
+										this:HighlightText(0, 0);
+										GRM_RaceOption["TokenRace"] = tonumber(this:GetText());
+									</OnEditFocusLost>
+        						</Scripts>
+							</EditBox>
+							<Slider name="GRM_Slider_AuctionInterval" inherits="GRM_SliderTemplate">
+		                        <Anchors><Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" relativeTo="GRM_Count_Label">
+        		                    <Offset><AbsDimension x="0" y="-35"/></Offset>
+                		        </Anchor></Anchors>
+        		            </Slider>							
+						</Frames>
+					</Frame>
+
+					<!-- 항목(개별) 텍스트 -->
+                    <Frame name="GRM_EachNamedHeader" inherits="GRM_HeaderTemplate">    
+                        <Scripts>
+							<OnLoad>
+								GRM_Header_OnLoad(222,-75);
+							</OnLoad>
+						</Scripts>
+                    </Frame>
+
+					<Frame name="GRM_EachNamedFrame" hidden="false">
+						<Size>
+							<AbsDimension x="360" y="400"/>
+						</Size>
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_EachNamedHeaderText" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="0" y="-30" /></Offset>
+						</Anchor></Anchors>
+						<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+							<BackgroundInsets>
+								<AbsInset left="4" right="4" top="4" bottom="4"/>
+							</BackgroundInsets>
+							<TileSize>
+								<AbsValue val="16"/>
+							</TileSize>
+							<EdgeSize>
+								<AbsValue val="16"/>
+							</EdgeSize>
+						</Backdrop>
+						<Layers>
+							<Layer>
+								<FontString name="GRM_Named_Label" inherits="GameFontNormal" text="Boss Name">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_EachNamedFrame" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="10" y="-17" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_List_Label" inherits="GameFontNormal" text="# Loot and Gold #">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Named_Label" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="0" y="-30" /></Offset>
+									</Anchor></Anchors>
+									<Color r="1.0" g="1.0" b="1.0"/>
+								</FontString>
+								<FontString name="GRM_Named_List" inherits="GameFontNormal" text="# Loot Log #">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="75" y="-30" /></Offset>
+									</Anchor></Anchors>
+									<Color r="0.9" g="0.8" b="0.5"/>
+								</FontString>
+								<FontString name="GRM_Gold_List" inherits="GameFontNormal" text="Gold">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Named_List" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="150" y="0" /></Offset>
+									</Anchor></Anchors>
+									<Color r="0.9" g="0.8" b="0.5"/>
+								</FontString>
+								<FontString name="GRM_Auction_Start" inherits="GameFontNormal" text="Start">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Gold_List" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="60" y="0" /></Offset>
+									</Anchor></Anchors>
+									<Color r="0.9" g="0.8" b="0.5"/>
+								</FontString>
+								<FontString name="GRM_List_Label1" inherits="GameFontNormal" text="[1]">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="0" y="-55" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_List_Label2" inherits="GameFontNormal" text="[2]">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label1" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="0" y="-22" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_List_Label3" inherits="GameFontNormal" text="[3]">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label2" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="0" y="-22" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_List_Label4" inherits="GameFontNormal" text="[4]">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label3" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="0" y="-22" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_List_Label5" inherits="GameFontNormal" text="[5]">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label4" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="0" y="-22" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_List_Label6" inherits="GameFontNormal" text="[6]">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label5" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="0" y="-22" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_List_Label7" inherits="GameFontNormal" text="[7]">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label6" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="0" y="-22" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_List_Label8" inherits="GameFontNormal" text="[8]">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label7" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="0" y="-22" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_AuctionChannel_Label" inherits="GameFontNormal" text="Auction Channel">
+									<Anchors><Anchor point="BOTTOMLEFT" relativeTo="GRM_EachNamedFrame" relativePoint="BOTTOMLEFT">
+										<Offset><AbsDimension x="10" y="20" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<EditBox name="GRM_Named_Edit" inherits="GRM_NamedEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_EachNamedFrame" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="145" y="-15"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										GRM_Named_Edit1:SetFocus();
+        						    </OnTabPressed>
+        						</Scripts>
+							</EditBox>
+							<EditBox name="GRM_Named_Edit1" inherits="GRM_NamedItemEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label1" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="35" y="3"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_Named_Edit2" inherits="GRM_NamedItemEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label2" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="35" y="3"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_Named_Edit3" inherits="GRM_NamedItemEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label3" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="35" y="3"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_Named_Edit4" inherits="GRM_NamedItemEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label4" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="35" y="3"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_Named_Edit5" inherits="GRM_NamedItemEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label5" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="35" y="3"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_Named_Edit6" inherits="GRM_NamedItemEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label6" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="35" y="3"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_Named_Edit7" inherits="GRM_NamedItemEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label7" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="35" y="3"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_Named_Edit8" inherits="GRM_NamedItemEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_List_Label8" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="35" y="3"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_NamedGold_Edit1" inherits="GRM_NamedGoldEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Named_Edit1" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="180" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_NamedGold_Edit2" inherits="GRM_NamedGoldEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Named_Edit2" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="180" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_NamedGold_Edit3" inherits="GRM_NamedGoldEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Named_Edit3" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="180" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_NamedGold_Edit4" inherits="GRM_NamedGoldEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Named_Edit4" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="180" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_NamedGold_Edit5" inherits="GRM_NamedGoldEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Named_Edit5" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="180" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_NamedGold_Edit6" inherits="GRM_NamedGoldEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Named_Edit6" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="180" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_NamedGold_Edit7" inherits="GRM_NamedGoldEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Named_Edit7" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="180" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<EditBox name="GRM_NamedGold_Edit8" inherits="GRM_NamedGoldEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Named_Edit8" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="180" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<Button name="GRM_Auction_Button1" inherits="GRM_AuctionButtonTemplate" text="[1] Start">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedGold_Edit1" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="8" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_Auction_Button2" inherits="GRM_AuctionButtonTemplate" text="[2] Start">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedGold_Edit2" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="8" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_Auction_Button3" inherits="GRM_AuctionButtonTemplate" text="[3] Start">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedGold_Edit3" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="8" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_Auction_Button4" inherits="GRM_AuctionButtonTemplate" text="[4] Start">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedGold_Edit4" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="8" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_Auction_Button5" inherits="GRM_AuctionButtonTemplate" text="[5] Start">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedGold_Edit5" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="8" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_Auction_Button6" inherits="GRM_AuctionButtonTemplate" text="[6] Start">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedGold_Edit6" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="8" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_Auction_Button7" inherits="GRM_AuctionButtonTemplate" text="[7] Start">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedGold_Edit7" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="8" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_Auction_Button8" inherits="GRM_AuctionButtonTemplate" text="[8] Start">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedGold_Edit8" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="8" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+
+							<Button name="GRM_AddNamed_Button" inherits="OptionsButtonTemplate" text="Add (Edit)">
+								<Size>
+									<AbsDimension x="100" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_Named_Edit" relativePoint="BOTTOMRIGHT">
+									<Offset><AbsDimension x="0" y="-8"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_NamedAddOnClick();
+									</OnClick>
+								</Scripts>
+							</Button>
+
+							<Button name="GRM_DelNamed_Button" inherits="OptionsButtonTemplate" text="Delete">
+								<Size>
+									<AbsDimension x="70" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_AddNamed_Button" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="-5" y="0"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_NamedDelOnClick();
+									</OnClick>
+								</Scripts>
+							</Button>
+
+							<Button name="GRM_NoAuctionCheck_Button" inherits="OptionsButtonTemplate" text="Check Bids">
+								<Size>
+									<AbsDimension x="90" y="28"/>
+								</Size>
+								<Anchors><Anchor point="BOTTOMRIGHT" relativeTo="GRM_EachNamedFrame" relativePoint="BOTTOMRIGHT">
+									<Offset><AbsDimension x="-10" y="70"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_NoAuctionCheckOnClick();
+									</OnClick>
+								</Scripts>
+							</Button>
+
+							<Button name="GRM_RaidInit_Button" inherits="OptionsButtonTemplate" text="Reset Raid">
+								<Size>
+									<AbsDimension x="90" y="28"/>
+								</Size>
+								<Anchors><Anchor point="BOTTOMRIGHT" relativeTo="GRM_EachNamedFrame" relativePoint="BOTTOMRIGHT">
+									<Offset><AbsDimension x="-10" y="10"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_RaidInitOnClick();
+									</OnClick>
+								</Scripts>
+							</Button>
+
+							<Button name="GRM_Refresh_Button" inherits="OptionsButtonTemplate" text="Refresh">
+								<Size>
+									<AbsDimension x="70" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_RaidInit_Button" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="-2" y="0"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_RefreshOnClick( true );
+									</OnClick>
+								</Scripts>
+							</Button>
+
+							<Button name="GRM_AuctionChannel_Button" inherits="OptionsButtonTemplate">
+								<Size>
+									<AbsDimension x="100" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_Refresh_Button" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="-2" y="0"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_AuctionChannelToggle();
+									</OnClick>
+								</Scripts>
+							</Button>
+
+							<CheckButton name="GRM_Check_AuctionItemLink" inherits="GRM_CheckButtonTemplate">	
+             		<Anchors><Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="GRM_AuctionChannel_Label">
+     		        	<Offset><AbsDimension x="0" y="10"/></Offset>
+								</Anchor></Anchors>
+              </CheckButton>
+              
+							<CheckButton name="GRM_Check_DiceParty" inherits="GRM_CheckButtonTemplate">	
+                        		<Anchors><Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="GRM_Check_AuctionItemLink">
+                		        	<Offset><AbsDimension x="0" y="3"/></Offset>
+								</Anchor></Anchors>
+              </CheckButton>
+              
+							<EditBox name="GRM_Dice_Edit" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Check_DicePartyText" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="11" y="5"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnEnter>
+										GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+										GameTooltip:SetText(GRM_locale.DiceParty_tooltip1, nil, nil, nil, nil, 1);
+									</OnEnter>
+									<OnLeave>
+										GameTooltip:Hide();
+									</OnLeave>
+								</Scripts>
+							</EditBox>							
+
+						</Frames>
+					</Frame>
+                </Frames>      
+            </Frame>
+
+			<!-- 2 페이지 -->
+			<Frame name="GRM_Tab2" hidden="true" >	
+				<Frames>
+					<!-- 짧은 브리핑 텍스트 -->
+					<Frame name="GRM_ShortBriefHeader" inherits="GRM_HeaderTemplate">    
+						<Scripts>
+							<OnLoad>
+								GRM_Header_OnLoad(10,-75);
+							</OnLoad>
+						</Scripts>
+					</Frame>
+					<!-- 짧은 브리핑 프레임 -->
+					<Frame name="GRM_ShortBriefFrame" hidden="false">
+						<Size>
+							<AbsDimension x="235" y="400"/>
+						</Size>
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_ShortBriefHeaderText" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="0" y="-30" /></Offset>
+						</Anchor></Anchors>
+						<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+							<BackgroundInsets>
+								<AbsInset left="4" right="4" top="4" bottom="4"/>
+							</BackgroundInsets>
+							<TileSize>
+								<AbsValue val="16"/>
+							</TileSize>
+							<EdgeSize>
+								<AbsValue val="16"/>
+							</EdgeSize>
+						</Backdrop>
+						<Layers>
+							<Layer>
+								<FontString name="GRM_ShortBriefText1" inherits="GRM_BriefFontTemplate" justifyH="LEFT" justifyV="TOP">
+									<Size>
+										<AbsDimension x="220" y="350"/>
+									</Size>
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_ShortBriefFrame" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="10" y="-10" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_NoLoot_Label" inherits="GameFontNormal" text="Divided by">
+									<Anchors><Anchor point="BOTTOMRIGHT">
+										<Offset><AbsDimension x="-160" y="75" /></Offset>
+									</Anchor></Anchors>
+								</FontString>								
+							</Layer>
+						</Layers>
+						<Frames>
+							<!-- 스크롤 프레임 -->
+							<ScrollFrame name="GRM_ShortBriefBodyScroll" inherits="UIPanelScrollFrameTemplate" toplevel="true">
+								<Anchors><Anchor point="TOPLEFT">
+									<Offset><AbsDimension x="5" y="-5"/></Offset>
+								</Anchor></Anchors>
+								<Size>
+									<AbsDimension x="203" y="300"/>
+								</Size>
+								<ScrollChild>
+									<EditBox name="GRM_ShortBriefText" letters="99999" multiLine="true" autoFocus="false" enableMouse="false" enableKeyboard="false">
+										<Size>
+											<AbsDimension x="205" y="300"/>
+										</Size>
+										<FontString inherits="SystemFont_Med1">
+                      <FontHeight>
+                      	<AbsValue val="13"/>
+                      </FontHeight>
+  										<Shadow>
+                  			<Offset>
+                  				<AbsDimension x="1" y="-1"/>
+                  			</Offset>
+                  			<Color r="0" g="0" b="0.6"/>
+                  		</Shadow>
+                  		<Color r="0" g="1" b="0.5"/>
+                  	</FontString>
+										<Scripts>
+											<OnLoad>
+												this:SetAutoFocus(false);
+												this:ClearFocus();
+											</OnLoad>
+											<OnTextChanged>
+												GRM_UpdateBriefing();
+												this:ClearFocus();
+											</OnTextChanged>
+											<OnTabPressed>
+												this:ClearFocus();
+											</OnTabPressed>
+											<OnEscapePressed>
+												this:ClearFocus();
+											</OnEscapePressed>
+											<OnClick>
+												this:ClearFocus();
+											</OnClick>
+										</Scripts>
+									</EditBox>
+								</ScrollChild>
+							</ScrollFrame>
+							<Button name="GRM_ShortBrief_Button" inherits="OptionsButtonTemplate" text="Gold Log">
+								<Size>
+									<AbsDimension x="200" y="28"/>
+								</Size>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_ShortBriefText1" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_BriefMsgToChannel( GRM_ShortBriefText:GetText() );
+									</OnClick>
+								</Scripts>
+							</Button>
+							<CheckButton name="GRM_Check_CutFraction" inherits="GRM_CheckButtonTemplate">	
+                <Anchors><Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" relativeTo="GRM_ShortBrief_Button">
+                  <Offset><AbsDimension x="0" y="3"/></Offset>
+								</Anchor></Anchors>
+		          </CheckButton>	
+							<EditBox name="GRM_NoLoot_Edit" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="GRM_Check_CutFraction">
+									<Offset><AbsDimension x="75" y="23"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										GRM_UpdateBriefing();
+        						    </OnTabPressed>
+									<OnEditFocusLost>
+										this:HighlightText(0, 0);
+										GRM_RaceOption["NoLoot"] = tonumber(this:GetText());
+										GRM_UpdateBriefing();
+									</OnEditFocusLost>
+									<OnEnter>
+										GameTooltip:SetOwner(this, "ANCHOR_LEFT");
+										GameTooltip:SetText("Enter number of non-looters. Applied after pressing enter.\nCaution when someone leaves during raid.",1,1,1,1);
+									</OnEnter>
+									<OnLeave>
+										GameTooltip:Hide();
+									</OnLeave>									
+        						</Scripts>
+							</EditBox>							
+						</Frames>
+					</Frame>
+
+					<!-- 커스텀 브리핑 텍스트 -->
+                    <Frame name="GRM_CustomBriefHeader" inherits="GRM_HeaderTemplate">    
+                        <Scripts>
+							<OnLoad>
+								GRM_Header_OnLoad(247,-75);
+							</OnLoad>
+						</Scripts>
+                    </Frame>
+
+					<!-- 커스텀 브리핑 프레임 -->
+					<Frame name="GRM_LongBriefFrame" hidden="false">
+						<Size>
+							<AbsDimension x="335" y="400"/>
+						</Size>
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_CustomBriefHeaderText" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="0" y="-30" /></Offset>
+						</Anchor></Anchors>
+						<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+							<BackgroundInsets>
+								<AbsInset left="4" right="4" top="4" bottom="4"/>
+							</BackgroundInsets>
+							<TileSize>
+								<AbsValue val="16"/>
+							</TileSize>
+							<EdgeSize>
+								<AbsValue val="16"/>
+							</EdgeSize>
+						</Backdrop>
+						<Layers>
+							<Layer>
+								<FontString name="GRM_LongBriefText" inherits="GRM_BriefFontTemplate" justifyH="LEFT" justifyV="TOP">
+									<Size>
+										<AbsDimension x="240" y="350"/>
+									</Size>
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_LongBriefFrame" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="10" y="-10" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_CurrentBrief_Label" inherits="GameFontNormal" text="# Briefing Title #">
+									<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_LongBriefFrame" relativePoint="TOPRIGHT">
+										<Offset><AbsDimension x="-40" y="-120" /></Offset>
+									</Anchor></Anchors>
+									<Color r="0.9" g="0.8" b="0.5"/>
+								</FontString>
+								<FontString name="GRM_BriefBody_Label" inherits="GameFontNormal" text="# Briefing Content #">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_LongBriefFrame" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="10" y="-172" /></Offset>
+									</Anchor></Anchors>
+									<Color r="0.9" g="0.8" b="0.5"/>
+								</FontString>							
+								<FontString name="GRM_CustomBriefChannel_Label" inherits="GameFontNormal" text="Briefing Channel">
+									<Anchors><Anchor point="BOTTOMLEFT" relativeTo="GRM_LongBriefFrame" relativePoint="BOTTOMLEFT">
+										<Offset><AbsDimension x="10" y="20" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<Frame name="GRM_BriefDetailFrame" hidden="false">
+								<Size>
+									<AbsDimension x="170" y="160"/>
+								</Size>
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_LongBriefFrame" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="3" y="-3" /></Offset>
+								</Anchor></Anchors>
+								<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+									<BackgroundInsets>
+										<AbsInset left="4" right="4" top="4" bottom="4"/>
+									</BackgroundInsets>
+									<TileSize>
+										<AbsValue val="16"/>
+									</TileSize>
+									<EdgeSize>
+										<AbsValue val="16"/>
+									</EdgeSize>
+								</Backdrop>
+								<Frames>
+									<!-- 스크롤 프레임 -->
+									<ScrollFrame name="GRM_BriefList_ScrollBar" inherits="FauxScrollFrameTemplate" hidden="true">
+										<Anchors>
+											<Anchor point="TOPLEFT">
+												<Offset><AbsDimension x="0" y="-8"/></Offset>
+											</Anchor>
+											<Anchor point="BOTTOMRIGHT">
+												<Offset><AbsDimension x="-30" y="8"/></Offset>
+											</Anchor>
+										</Anchors>
+										<Scripts>
+											<OnVerticalScroll>
+												FauxScrollFrame_OnVerticalScroll( self, offset, 16, GRM_BriefList_ScrollBar_Update );
+											</OnVerticalScroll>
+											<OnShow>
+												GRM_BriefList_ScrollBar_Update();
+											</OnShow>
+										</Scripts>
+									</ScrollFrame>
+								</Frames>
+							</Frame>
+							<!-- 리스트 항목 -->
+							<Button name="GRM_BriefList_Entry1" inherits="GRM_BriefList_Template" id="1">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_BriefList_ScrollBar" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="8" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_BriefList_Entry2" inherits="GRM_BriefList_Template" id="2">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_BriefList_Entry1" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_BriefList_Entry3" inherits="GRM_BriefList_Template" id="3">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_BriefList_Entry2" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_BriefList_Entry4" inherits="GRM_BriefList_Template" id="4">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_BriefList_Entry3" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_BriefList_Entry5" inherits="GRM_BriefList_Template" id="5">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_BriefList_Entry4" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_BriefList_Entry6" inherits="GRM_BriefList_Template" id="6">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_BriefList_Entry5" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_BriefList_Entry7" inherits="GRM_BriefList_Template" id="7">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_BriefList_Entry6" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<Button name="GRM_BriefList_Entry8" inherits="GRM_BriefList_Template" id="8">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_BriefList_Entry7" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>
+							<EditBox name="GRM_BriefTitle_Edit" inherits="GRM_BriefTitleEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_CurrentBrief_Label" relativePoint="BOTTOMLEFT">
+										<Offset><AbsDimension x="-25" y="-10"/></Offset>
+									</Anchor>
+								</Anchors>
+        						<Scripts>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										GRM_BriefBodyScrollText:SetFocus();
+        						    </OnTabPressed>
+        						</Scripts>
+							</EditBox>
+							<Button name="GRM_BriefAdd_Button" inherits="OptionsButtonTemplate" text="Add">
+								<Size>
+									<AbsDimension x="90" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_LongBriefFrame" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="-10" y="-11" /></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_BriefAddOnClick();
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="GRM_BriefRemove_Button" inherits="OptionsButtonTemplate" text="Delete">
+								<Size>
+									<AbsDimension x="90" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_BriefAdd_Button" relativePoint="BOTTOMRIGHT">
+									<Offset><AbsDimension x="0" y="-4" /></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_BriefRemoveOnClick();
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="GRM_BriefNew_Button" inherits="OptionsButtonTemplate" text="Refresh">
+								<Size>
+									<AbsDimension x="90" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_BriefRemove_Button" relativePoint="BOTTOMRIGHT">
+									<Offset><AbsDimension x="0" y="-4" /></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_BriefNewOnClick();
+									</OnClick>
+								</Scripts>
+							</Button>							
+							<Button name="GRM_LongBrief_Button" inherits="OptionsButtonTemplate" text="Announce">
+								<Size>
+									<AbsDimension x="110" y="28"/>
+								</Size>
+								<Anchors><Anchor point="BOTTOMRIGHT" relativeTo="GRM_LongBriefFrame" relativePoint="BOTTOMRIGHT">
+									<Offset><AbsDimension x="-10" y="10" /></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_BriefMsgToChannel( GRM_BriefBodyScrollText:GetText(), GRM_Option["CustomBriefChannel"] );
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="GRM_CustomBriefChannel_Button" inherits="OptionsButtonTemplate">
+								<Size>
+									<AbsDimension x="100" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_LongBrief_Button" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="-35" y="0"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_CustomBriefChannelToggle();
+									</OnClick>
+								</Scripts>
+							</Button>							
+							<Frame name="GRM_BriefListFrame" hidden="false">
+								<Size>
+									<AbsDimension x="320" y="170"/>
+								</Size>
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_BriefBody_Label" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="-3" y="-20" /></Offset>
+								</Anchor></Anchors>
+								<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+									<BackgroundInsets>
+										<AbsInset left="4" right="4" top="4" bottom="4"/>
+									</BackgroundInsets>
+									<TileSize>
+										<AbsValue val="16"/>
+									</TileSize>
+									<EdgeSize>
+										<AbsValue val="16"/>
+									</EdgeSize>
+								</Backdrop>
+								<Frames>
+									<!-- 스크롤 프레임 -->
+									<ScrollFrame name="GRM_BriefBodyScroll" inherits="UIPanelScrollFrameTemplate" toplevel="true">
+										<Anchors><Anchor point="TOP">
+											<Offset><AbsDimension x="-10" y="-8"/></Offset>
+										</Anchor></Anchors>
+										<Size>
+											<AbsDimension x="280" y="153"/>
+										</Size>
+										<ScrollChild>
+											<EditBox name="GRM_BriefBodyScrollText" letters="99999" multiLine="true" autoFocus="true" enableMouse="true" enableKeyboard="true">
+												<Size>
+													<AbsDimension x="280" y="160"/>
+												</Size>
+												<FontString inherits="ChatFontNormal"/>
+												<Scripts>
+													<OnLoad>
+														this:SetAutoFocus(false);
+													</OnLoad>
+													<OnTextChanged>
+														GRM_BriefOnTextChanged();
+													</OnTextChanged>
+													<OnTabPressed>
+														GRM_BriefTitle_Edit:SetFocus();
+													</OnTabPressed>
+													<OnEscapePressed>
+														this:ClearFocus();
+													</OnEscapePressed>
+												</Scripts>
+											</EditBox>
+										</ScrollChild>
+									</ScrollFrame>
+            			<Button name="GRM_BriefBodyScrollTextButton">
+            				<Size>
+            					<AbsDimension x="280" y="160"/>
+            				</Size>
+            				<Anchors>
+            					<Anchor point="TOPLEFT" relativeTo="GRM_BriefBodyScrollText"/>
+            				</Anchors>
+            				<Scripts>
+            					<OnClick>
+            						GRM_BriefBodyScrollText:SetFocus();
+            					</OnClick>
+            				</Scripts>
+            			</Button>
+								</Frames>
+							</Frame>
+						</Frames>
+					</Frame>
+
+					<!--
+					<CheckButton name="GRM_Radio_Example1" inherits="GRM_RadioButtonTemplate" id="1">
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Header2Text" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="10" y="-25"/></Offset>
+						</Anchor></Anchors> 
+					</CheckButton>
+					<CheckButton name="GRM_Radio_Example2" inherits="GRM_RadioButtonTemplate" id="2">
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_Radio_Example1" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="0" y="-25"/></Offset>
+						</Anchor></Anchors> 
+					</CheckButton>
+					-->
+				</Frames>      
+			</Frame>  
+
+			<!-- 3 페이지 -->
+				<Frame name="GRM_Tab3" hidden="true" >	
+				<Frames>
+					<!-- 선입 텍스트 -->
+					<Frame name="GRM_PriorEntryHeader" inherits="GRM_HeaderTemplate">    
+						<Scripts>
+							<OnLoad>
+								GRM_Header_OnLoad(10,-75);
+							</OnLoad>
+						</Scripts>
+					</Frame>
+
+					<!-- 선입 프레임 -->
+					<Frame name="GRM_PriorEntryFrame" hidden="false">
+						<Size>
+							<AbsDimension x="570" y="400"/>
+						</Size>
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorEntryHeaderText" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="0" y="-30" /></Offset>
+						</Anchor></Anchors>
+						<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+							<BackgroundInsets>
+								<AbsInset left="4" right="4" top="4" bottom="4"/>
+							</BackgroundInsets>
+							<TileSize>
+								<AbsValue val="16"/>
+							</TileSize>
+							<EdgeSize>
+								<AbsValue val="16"/>
+							</EdgeSize>
+						</Backdrop>
+						<Layers>
+							<Layer>
+								<FontString name="GRM_PriorPlayer_Label" inherits="GameFontNormal" text="Player">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorEntryFrame" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="25" y="-13" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_PriorItem_Label" inherits="GameFontNormal" text="Loot">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer_Label" relativePoint="TOPRIGHT">
+										<Offset><AbsDimension x="80" y="0" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_PriorCount_Label" inherits="GameFontNormal" text="D">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem_Label" relativePoint="TOPRIGHT">
+										<Offset><AbsDimension x="65" y="0" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_PriorLootOK_Label" inherits="GameFontNormal" text="L">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorCount_Label" relativePoint="TOPRIGHT">
+										<Offset><AbsDimension x="15" y="0" /></Offset>
+									</Anchor></Anchors>
+								</FontString>								
+								<FontString name="GRM_PriorPlayer2_Label" inherits="GameFontNormal" text="Player">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorLootOK_Label" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="30" y="0" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_PriorItem2_Label" inherits="GameFontNormal" text="Loot">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer2_Label" relativePoint="TOPRIGHT">
+										<Offset><AbsDimension x="70" y="0" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_PriorCount2_Label" inherits="GameFontNormal" text="D">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem2_Label" relativePoint="TOPRIGHT">
+										<Offset><AbsDimension x="65" y="0" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_PriorLootOK2_Label" inherits="GameFontNormal" text="L">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorCount2_Label" relativePoint="TOPRIGHT">
+										<Offset><AbsDimension x="15" y="0" /></Offset>
+									</Anchor></Anchors>
+								</FontString>																
+								<FontString name="GRM_GoldPerCount_Label" inherits="GameFontNormal" text="Gold per Deal">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorEntryFrame" relativePoint="BOTTOMLEFT">
+										<Offset><AbsDimension x="10" y="112" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+							</Layer>
+						</Layers>						
+						<Frames>
+							<!-- 1팟 -->
+							<Button name="GRM_PriorPlayer11" inherits="GRM_PriorList_Template" id="11">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorEntryFrame" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="8" y="-40"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_PriorPlayer12" inherits="GRM_PriorList_Template" id="12">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer11" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer13" inherits="GRM_PriorList_Template" id="13">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer12" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer14" inherits="GRM_PriorList_Template" id="14">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer13" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer15" inherits="GRM_PriorList_Template" id="15">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer14" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<EditBox name="GRM_PriorItem11_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer11" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem12_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer12" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem13_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer13" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem14_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer14" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem15_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer15" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorCount11_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem11_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount12_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem12_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount13_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem13_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount14_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem14_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount15_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem15_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<CheckButton name="GRM_Check_Prior11" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount11_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior12" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount12_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior13" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount13_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior14" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount14_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior15" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount15_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+		                    </CheckButton>
+
+							<!-- 2팟 -->
+							<Button name="GRM_PriorPlayer21" inherits="GRM_PriorList_Template" id="21">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer15" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="0" y="-40"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_PriorPlayer22" inherits="GRM_PriorList_Template" id="22">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer21" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer23" inherits="GRM_PriorList_Template" id="23">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer22" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer24" inherits="GRM_PriorList_Template" id="24">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer23" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer25" inherits="GRM_PriorList_Template" id="25">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer24" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<EditBox name="GRM_PriorItem21_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer21" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem22_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer22" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem23_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer23" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem24_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer24" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem25_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer25" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorCount21_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem21_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount22_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem22_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount23_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem23_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount24_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem24_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount25_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem25_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<CheckButton name="GRM_Check_Prior21" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount21_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior22" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount22_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior23" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount23_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior24" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount24_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior25" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount25_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+		                    </CheckButton>							
+
+							<!-- 3팟 -->
+							<Button name="GRM_PriorPlayer31" inherits="GRM_PriorList_Template" id="31">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorCount11_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_PriorPlayer32" inherits="GRM_PriorList_Template" id="32">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer31" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer33" inherits="GRM_PriorList_Template" id="33">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer32" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer34" inherits="GRM_PriorList_Template" id="34">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer33" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer35" inherits="GRM_PriorList_Template" id="35">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer34" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<EditBox name="GRM_PriorItem31_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer31" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem32_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer32" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem33_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer33" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem34_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer34" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem35_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer35" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorCount31_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem31_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount32_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem32_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount33_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem33_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount34_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem34_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount35_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem35_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<CheckButton name="GRM_Check_Prior31" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount31_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior32" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount32_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior33" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount33_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior34" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount34_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior35" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount35_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+		                    </CheckButton>						
+
+							<!-- 4팟 -->
+							<Button name="GRM_PriorPlayer41" inherits="GRM_PriorList_Template" id="41">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorCount21_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_PriorPlayer42" inherits="GRM_PriorList_Template" id="42">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer41" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer43" inherits="GRM_PriorList_Template" id="43">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer42" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer44" inherits="GRM_PriorList_Template" id="44">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer43" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer45" inherits="GRM_PriorList_Template" id="45">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer44" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<EditBox name="GRM_PriorItem41_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer41" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem42_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer42" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem43_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer43" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem44_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer44" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem45_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer45" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorCount41_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem41_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount42_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem42_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount43_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem43_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount44_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem44_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount45_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem45_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<CheckButton name="GRM_Check_Prior41" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount41_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior42" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount42_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior43" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount43_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior44" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount44_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior45" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount45_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+
+							<!-- 5팟 -->
+							<Button name="GRM_PriorPlayer51" inherits="GRM_PriorList_Template" id="51">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer45" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="0" y="-40"/></Offset>
+								</Anchor></Anchors>
+							</Button>
+							<Button name="GRM_PriorPlayer52" inherits="GRM_PriorList_Template" id="52">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer51" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer53" inherits="GRM_PriorList_Template" id="53">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer52" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer54" inherits="GRM_PriorList_Template" id="54">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer53" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<Button name="GRM_PriorPlayer55" inherits="GRM_PriorList_Template" id="55">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer54" relativePoint="BOTTOMLEFT"/>
+								</Anchors>
+							</Button>	
+							<EditBox name="GRM_PriorItem51_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer51" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem52_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer52" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem53_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer53" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem54_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer54" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorItem55_Edit" inherits="GRM_PriorItemEditBoxTemplate">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_PriorPlayer55" relativePoint="TOPRIGHT"/>
+								</Anchors>
+							</EditBox>
+							<EditBox name="GRM_PriorCount51_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem51_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount52_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem52_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount53_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem53_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount54_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem54_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>	
+							<EditBox name="GRM_PriorCount55_Edit" inherits="GRM_PriorCountEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem55_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="7" y="0"/></Offset>
+								</Anchor></Anchors>
+							</EditBox>
+							<CheckButton name="GRM_Check_Prior51" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount51_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior52" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount52_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior53" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount53_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior54" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount54_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+							<CheckButton name="GRM_Check_Prior55" inherits="GRM_PriorCheckButtonTemplate">	
+                        		<Anchors><Anchor point="TOPLEFT" relativePoint="TOPRIGHT" relativeTo="GRM_PriorCount55_Edit">
+                		        	<Offset><AbsDimension x="0" y="1"/></Offset>
+								</Anchor></Anchors>
+							</CheckButton>
+
+							<EditBox name="GRM_GoldPerCount_Edit" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorItem25_Edit" relativePoint="TOPLEFT">
+									<Offset><AbsDimension x="0" y="-43"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+        						    </OnTabPressed>
+									<OnEditFocusLost>
+										this:HighlightText(0, 0);
+										GRM_RaceOption["GoldPerDeal"] = tonumber(this:GetText());
+									</OnEditFocusLost>
+        						</Scripts>
+							</EditBox>
+							<Button name="GRM_BriefPriorGold_Button" inherits="OptionsButtonTemplate" text="Gold Log">
+								<Size>
+									<AbsDimension x="110" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_GoldPerCount_Edit" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="11" y="3"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_BriefPriorGoldOnClick();
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="GRM_BriefPriorEntry_Button" inherits="OptionsButtonTemplate" text="Reserve (player) Log">
+								<Size>
+									<AbsDimension x="150" y="28"/>
+								</Size>
+								<Anchors><Anchor point="BOTTOMLEFT" relativeTo="GRM_PriorEntryFrame" relativePoint="BOTTOMLEFT">
+									<Offset><AbsDimension x="5" y="45"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_BriefPriorEntryOnClick();
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="GRM_BriefPriorItemEntry_Button" inherits="OptionsButtonTemplate" text="Reserve (loot) Log">
+								<Size>
+									<AbsDimension x="150" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPRIGHT" relativeTo="GRM_BriefPriorEntry_Button" relativePoint="BOTTOMRIGHT">
+									<Offset><AbsDimension x="0" y="-5"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_BriefPriorItemEntryOnClick();
+									</OnClick>
+								</Scripts>
+							</Button>
+							<Button name="GRM_PriorEntry_Button" inherits="OptionsButtonTemplate" text="Delete">
+								<Size>
+									<AbsDimension x="120" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_BriefPriorItemEntry_Button" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="3" y="0"/></Offset>
+								</Anchor></Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_ClearPriorList( true );
+									</OnClick>
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+				</Frames>      
+			</Frame>  
+
+			<!-- 4 페이지 -->
+			<Frame name="GRM_Tab4" hidden="true" >	
+				<Frames>
+					<!-- 네임드별 루팅내역 텍스트 -->
+					<Frame name="GRM_NamedLootBriefHeader" inherits="GRM_HeaderTemplate">    
+						<Scripts>
+							<OnLoad>
+								GRM_Header_OnLoad(10,-75);
+							</OnLoad>
+						</Scripts>
+					</Frame>
+					<!-- 네임드별 루팅내역 프레임 -->
+					<Frame name="GRM_NamedLootBriefFrame" hidden="false">
+						<Size>
+							<AbsDimension x="285" y="400"/>
+						</Size>
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedLootBriefHeaderText" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="0" y="-30" /></Offset>
+						</Anchor></Anchors>
+						<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+							<BackgroundInsets>
+								<AbsInset left="4" right="4" top="4" bottom="4"/>
+							</BackgroundInsets>
+							<TileSize>
+								<AbsValue val="16"/>
+							</TileSize>
+							<EdgeSize>
+								<AbsValue val="16"/>
+							</EdgeSize>
+						</Backdrop>
+						<Layers>
+							<Layer>
+								<FontString name="GRM_NamedLootBriefText1" inherits="GRM_BriefFontTemplate" justifyH="LEFT" justifyV="TOP">
+									<Size>
+										<AbsDimension x="255" y="350"/>
+									</Size>
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_NamedLootBriefFrame" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="10" y="-10" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<!-- 스크롤 프레임 -->
+							<ScrollFrame name="GRM_NamedLootBriefBodyScroll" inherits="UIPanelScrollFrameTemplate" toplevel="true">
+								<Anchors><Anchor point="TOPLEFT">
+									<Offset><AbsDimension x="5" y="-5"/></Offset>
+								</Anchor></Anchors>
+								<Size>
+									<AbsDimension x="255" y="350"/>
+								</Size>
+								<ScrollChild>
+									<EditBox name="GRM_NamedLootBriefText" letters="99999" multiLine="true" autoFocus="false" enableMouse="false" enableKeyboard="false">
+										<Size>
+											<AbsDimension x="255" y="350"/>
+										</Size>
+										<FontString inherits="SystemFont_Med1">
+                      <FontHeight>
+                      	<AbsValue val="13"/>
+                      </FontHeight>
+  										<Shadow>
+                  			<Offset>
+                  				<AbsDimension x="1" y="-1"/>
+                  			</Offset>
+                  			<Color r="0" g="0" b="0.6"/>
+                  		</Shadow>
+                  		<Color r="0" g="1" b="0.5"/>
+                  	</FontString>
+										<Scripts>
+											<OnLoad>
+												this:SetAutoFocus(false);
+												this:ClearFocus();
+											</OnLoad>
+											<OnTextChanged>
+                        GRM_OnLootLog();
+												this:ClearFocus();
+											</OnTextChanged>
+											<OnTabPressed>
+												this:ClearFocus();
+											</OnTabPressed>
+											<OnEscapePressed>
+												this:ClearFocus();
+											</OnEscapePressed>
+											<OnClick>
+												this:ClearFocus();
+											</OnClick>
+											<OnShow>
+											GRM_OnLootLog();
+											</OnShow>
+										</Scripts>
+									</EditBox>
+								</ScrollChild>
+							</ScrollFrame>
+							<Button name="GRM_NamedLootLog_Button" inherits="OptionsButtonTemplate" text="Loot Log (Boss)">
+								<Size>
+									<AbsDimension x="150" y="28"/>
+								</Size>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_NamedLootBriefText1" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="60" y="-350"/></Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_BriefMsgToChannel( GRM_NamedLootBriefText:GetText() );
+									</OnClick>
+								</Scripts>
+							</Button>
+						</Frames>
+					</Frame>
+
+					<!-- 유저별 루팅내역 텍스트 -->
+          <Frame name="GRM_UserLootBriefHeader" inherits="GRM_HeaderTemplate">    
+                        <Scripts>
+							<OnLoad>
+								GRM_Header_OnLoad(295,-75);
+							</OnLoad>
+						</Scripts>
+          </Frame>
+
+					<!-- 유저별 루팅내역 프레임 -->
+					<Frame name="GRM_UserLootBriefFrame" hidden="false">
+						<Size>
+							<AbsDimension x="285" y="400"/>
+						</Size>
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_UserLootBriefHeaderText" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="0" y="-30" /></Offset>
+						</Anchor></Anchors>
+						<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+							<BackgroundInsets>
+								<AbsInset left="4" right="4" top="4" bottom="4"/>
+							</BackgroundInsets>
+							<TileSize>
+								<AbsValue val="16"/>
+							</TileSize>
+							<EdgeSize>
+								<AbsValue val="16"/>
+							</EdgeSize>
+						</Backdrop>
+						<Layers>
+							<Layer>
+								<FontString name="GRM_UserLootBriefText1" inherits="GRM_BriefFontTemplate" justifyH="LEFT" justifyV="TOP">
+									<Size>
+										<AbsDimension x="255" y="350"/>
+									</Size>
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_UserLootBriefFrame" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="10" y="-10" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+							</Layer>
+						</Layers>
+						<Frames>
+							<!-- 스크롤 프레임 -->
+							<ScrollFrame name="GRM_UserLootBriefBodyScroll" inherits="UIPanelScrollFrameTemplate" toplevel="true">
+								<Anchors><Anchor point="TOPLEFT">
+									<Offset><AbsDimension x="5" y="-5"/></Offset>
+								</Anchor></Anchors>
+								<Size>
+									<AbsDimension x="255" y="350"/>
+								</Size>
+								<ScrollChild>
+									<EditBox name="GRM_UserLootBriefText" letters="99999" multiLine="true" autoFocus="false" enableMouse="false" enableKeyboard="false">
+										<Size>
+											<AbsDimension x="255" y="350"/>
+										</Size>
+										<FontString inherits="SystemFont_Med1">
+                      <FontHeight>
+                      	<AbsValue val="13"/>
+                      </FontHeight>
+  										<Shadow>
+                  			<Offset>
+                  				<AbsDimension x="1" y="-1"/>
+                  			</Offset>
+                  			<Color r="0" g="0" b="0.6"/>
+                  		</Shadow>
+                  		<Color r="0" g="1" b="0.5"/>
+                  	</FontString>
+										<Scripts>
+											<OnLoad>
+												this:SetAutoFocus(false);
+												this:ClearFocus();
+											</OnLoad>
+											<OnTextChanged>
+                        GRM_OnLootLogPerUser();
+												this:ClearFocus();
+											</OnTextChanged>
+											<OnTabPressed>
+												this:ClearFocus();
+											</OnTabPressed>
+											<OnEscapePressed>
+												this:ClearFocus();
+											</OnEscapePressed>
+											<OnClick>
+												this:ClearFocus();
+											</OnClick>
+											<OnShow>
+											GRM_OnLootLogPerUser();
+											</OnShow>
+										</Scripts>
+									</EditBox>
+								</ScrollChild>
+							</ScrollFrame>
+
+							<Button name="GRM_UserLootLog_Button" inherits="OptionsButtonTemplate" text="Loot Log (Player)">
+								<Size>
+									<AbsDimension x="150" y="28"/>
+								</Size>
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeTo="GRM_UserLootBriefText1" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="60" y="-350"/></Offset>
+									</Anchor>
+								</Anchors>
+								<Scripts>
+									<OnClick>
+										PlaySound("gsTitleOptionOK");
+										GRM_BriefMsgToChannel( GRM_UserLootBriefText:GetText() );
+									</OnClick>
+								</Scripts>
+							</Button>
+
+						</Frames>
+					</Frame>
+				</Frames>      
+			</Frame>  
+
+			<!-- 5 페이지 -->
+			<Frame name="GRM_Tab5" hidden="true" >	
+				<Frames>
+					<!-- 자동 광고 텍스트 -->
+					<Frame name="GRM_AutoAdvertisingHeader" inherits="GRM_HeaderTemplate">    
+						<Scripts>
+							<OnLoad>
+								GRM_Header_OnLoad(10,-75);
+							</OnLoad>
+						</Scripts>
+					</Frame>
+
+					<!-- 자동 광고 프레임 -->
+					<Frame name="GRM_AutoAdvertisingFrame" hidden="false">
+						<Size>
+							<AbsDimension x="570" y="400"/>
+						</Size>
+						<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_PriorEntryHeaderText" relativePoint="TOPLEFT">
+							<Offset><AbsDimension x="0" y="-30" /></Offset>
+						</Anchor></Anchors>
+						<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+							<BackgroundInsets>
+								<AbsInset left="4" right="4" top="4" bottom="4"/>
+							</BackgroundInsets>
+							<TileSize>
+								<AbsValue val="16"/>
+							</TileSize>
+							<EdgeSize>
+								<AbsValue val="16"/>
+							</EdgeSize>
+						</Backdrop>
+						<Layers>
+							<Layer>
+								<FontString name="GRM_AutoAdvertisingChannel_Label" inherits="GameFontNormal" text="Channel Index :">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingFrame" relativePoint="TOPLEFT">
+										<Offset><AbsDimension x="25" y="-13" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_AutoAdvertisingInterval_Label" inherits="GameFontNormal" text="Adv interval :">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingChannel_Label" relativePoint="BOTTOMLEFT">
+										<Offset><AbsDimension x="0" y="-30" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_AutoAdvertisingInterval_LabelMin" inherits="GameFontNormal" text="        min">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingChannel_Label" relativePoint="BOTTOMLEFT">
+										<Offset><AbsDimension x="140" y="-30" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_AutoAdvertisingMsg_Label" inherits="GameFontNormal" text="Advertising message">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingInterval_Label" relativePoint="BOTTOMLEFT">
+										<Offset><AbsDimension x="0" y="-30" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+								<FontString name="GRM_AutoAdvertisingMemo_Label" inherits="GameFontNormal" text="Memo">
+									<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMsg_Label" relativePoint="BOTTOMLEFT">
+										<Offset><AbsDimension x="0" y="-100" /></Offset>
+									</Anchor></Anchors>
+								</FontString>
+							</Layer>
+						</Layers>						
+						<Frames>
+
+							<!-- 광고 채널 인덱스 1 -->
+							<EditBox name="GRM_AutoAdvertisingChannelText1" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingChannel_Label" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="20" y="3"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						<OnLoad>
+        						this:SetJustifyH("CENTER");
+        						</OnLoad>
+    						    <OnTabPressed>
+    						        this:ClearFocus();
+								        GRM_AutoAdvertisingChannelText2:SetFocus();
+    						    </OnTabPressed>
+  									<OnEditFocusLost>
+  										this:HighlightText(0, 0);
+  										GRM_AutoAdvertise["AutoAdvertisingChannel1"] = tonumber(this:GetText());
+  									</OnEditFocusLost>
+        						</Scripts>
+							</EditBox>
+
+							<!-- 광고 채널 인덱스 2 -->
+							<EditBox name="GRM_AutoAdvertisingChannelText2" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingChannelText1" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="20" y="0"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						<OnLoad>
+        						this:SetJustifyH("CENTER");
+        						</OnLoad>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										        GRM_AutoAdvertisingChannelText3:SetFocus();
+        						    </OnTabPressed>
+									<OnEditFocusLost>
+										this:HighlightText(0, 0);
+										GRM_AutoAdvertise["AutoAdvertisingChannel2"] = tonumber(this:GetText());
+									</OnEditFocusLost>
+        						</Scripts>
+							</EditBox>
+
+							<!-- 광고 채널 인덱스 3 -->
+							<EditBox name="GRM_AutoAdvertisingChannelText3" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingChannelText2" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="20" y="0"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						<OnLoad>
+        						this:SetJustifyH("CENTER");
+        						</OnLoad>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										        GRM_AutoAdvertisingIntervalText:SetFocus();
+        						    </OnTabPressed>
+									<OnEditFocusLost>
+										this:HighlightText(0, 0);
+										GRM_AutoAdvertise["AutoAdvertisingChannel3"] = tonumber(this:GetText());
+									</OnEditFocusLost>
+        						</Scripts>
+							</EditBox>
+							
+							<!-- 광고 간격 카운트 -->
+							<EditBox name="GRM_AutoAdvertisingIntervalText" inherits="GRM_NumberEditBoxTemplate">
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingInterval_Label" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="30" y="3"/></Offset>
+								</Anchor></Anchors>
+        						<Scripts>
+        						<OnLoad>
+        						this:SetJustifyH("CENTER");
+        						</OnLoad>
+        						    <OnTabPressed>
+        						        this:ClearFocus();
+										        GRM_AutoAdvertisingMsg_Text:SetFocus();
+        						    </OnTabPressed>
+									<OnEditFocusLost>
+										this:HighlightText(0, 0);
+										local str = this:GetText();
+										if( str == "" ) then
+										  str = "1";
+										  GRM_AutoAdvertisingIntervalText:SetText(str);
+										end
+										local a = tonumber(str);
+										GRM_AutoAdvertise["AutoAdvertisingInterval"] = a * 60;
+									</OnEditFocusLost>
+        						</Scripts>
+							</EditBox>
+
+							<Frame name="GRM_AutoAdvertisingMsgFrame" hidden="false">
+								<Size>
+									<AbsDimension x="400" y="70"/>
+								</Size>
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMsg_Label" relativePoint="BOTTOMLEFT">
+									<Offset><AbsDimension x="10" y="-5" /></Offset>
+								</Anchor></Anchors>
+								<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+									<BackgroundInsets>
+										<AbsInset left="4" right="4" top="4" bottom="4"/>
+									</BackgroundInsets>
+									<TileSize>
+										<AbsValue val="16"/>
+									</TileSize>
+									<EdgeSize>
+										<AbsValue val="16"/>
+									</EdgeSize>
+								</Backdrop>
+								<Frames>
+							<!-- 스크롤 프레임 -->
+							<ScrollFrame name="GRM_AutoAdvertisingMsgScroll" inherits="UIPanelScrollFrameTemplate">
+								<Anchors><Anchor point="TOP">
+									<Offset><AbsDimension x="-10" y="-8"/></Offset>
+								</Anchor></Anchors>
+								<Size>
+									<AbsDimension x="360" y="55"/>
+								</Size>
+								<ScrollChild>
+    							<EditBox name="GRM_AutoAdvertisingMsg_Text" letters="255" multiLine="true" autoFocus="false">
+    								<Size>
+    									<AbsDimension x="360" y="55"/>
+    								</Size>
+    								<FontString inherits="SystemFont_Med1">
+                      <FontHeight>
+                      	<AbsValue val="13"/>
+                      </FontHeight>
+    									<Shadow>
+                  			<Offset>
+                  				<AbsDimension x="1" y="-1"/>
+                  			</Offset>
+                  			<Color r="0" g="0" b="0.6"/>
+                  		</Shadow>
+                  		<Color r="0" g="1" b="0.5"/>
+                  	</FontString>
+    								<Scripts>
+    									<OnLoad>
+	        						this:SetJustifyV("TOP");
+    									</OnLoad>
+    									<OnTextChanged>
+    									ScrollingEdit_OnTextChanged(self, self:GetParent());
+    									</OnTextChanged>
+    									<OnTabPressed>
+    										this:ClearFocus();
+    									</OnTabPressed>
+                      <OnEnterPressed>
+                          this:ClearFocus();
+                      </OnEnterPressed>
+        							<OnCursorChanged function="ScrollingEdit_OnCursorChanged"/>
+				        			<OnUpdate>
+        								ScrollingEdit_OnUpdate(self, elapsed, self:GetParent());
+        							</OnUpdate>
+        							<OnEscapePressed function="EditBox_ClearFocus"/>
+        							<OnEditFocusGained>
+          					  GRM_Advertising_CheckStop();
+        							</OnEditFocusGained>
+    									<OnEditFocusLost>
+    										GRM_AutoAdvertise["Msg"] = this:GetText();
+    									</OnEditFocusLost>
+    								</Scripts>
+    							</EditBox>
+								</ScrollChild>
+							</ScrollFrame>
+        			<Button name="GRM_AutoAdvertisingMsg_TextButton">
+        				<Size>
+        					<AbsDimension x="360" y="55"/>
+        				</Size>
+        				<Anchors>
+        					<Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMsg_Text"/>
+        				</Anchors>
+        				<Scripts>
+        					<OnClick>
+        						GRM_AutoAdvertisingMsg_Text:SetFocus();
+        					</OnClick>
+        				</Scripts>
+        			</Button>
+								</Frames>
+							</Frame>
+
+							<Frame name="GRM_AutoAdvertisingMemoFrame" hidden="false">
+								<Size>
+									<AbsDimension x="500" y="150"/>
+								</Size>
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMemo_Label" relativePoint="BOTTOMLEFT">
+									<Offset><AbsDimension x="10" y="-5" /></Offset>
+								</Anchor></Anchors>
+								<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+									<BackgroundInsets>
+										<AbsInset left="4" right="4" top="4" bottom="4"/>
+									</BackgroundInsets>
+									<TileSize>
+										<AbsValue val="16"/>
+									</TileSize>
+									<EdgeSize>
+										<AbsValue val="16"/>
+									</EdgeSize>
+								</Backdrop>
+								<Frames>							
+							<ScrollFrame name="GRM_AutoAdvertisingMemoScroll" inherits="UIPanelScrollFrameTemplate" toplevel="true">
+								<Anchors><Anchor point="TOP">
+									<Offset><AbsDimension x="-10" y="-8"/></Offset>
+								</Anchor></Anchors>
+								<Size>
+									<AbsDimension x="460" y="135"/>
+								</Size>
+								<ScrollChild>
+    							<EditBox name="GRM_AutoAdvertisingMemo_Text" letters="99999" multiLine="true" autoFocus="false">
+    								<Size>
+    									<AbsDimension x="460" y="135"/>
+    								</Size>
+    								<FontString inherits="SystemFont_Med1">
+                      <FontHeight>
+                      	<AbsValue val="13"/>
+                      </FontHeight>
+    									<Shadow>
+                  			<Offset>
+                  				<AbsDimension x="1" y="-1"/>
+                  			</Offset>
+                  			<Color r="0" g="0" b="0.6"/>
+                  		</Shadow>
+                  		<Color r="0" g="1" b="0.5"/>
+                  	</FontString>
+    								<Scripts>
+    									<OnLoad>
+	        						this:SetJustifyV("TOP");
+    									</OnLoad>
+    									<OnTextChanged>
+    									ScrollingEdit_OnTextChanged(self, self:GetParent());
+    									</OnTextChanged>
+    									<OnTabPressed>
+    									  GRM_AutoAdvertise["Msg"] = this:GetText();
+    										this:ClearFocus();    										
+    									</OnTabPressed>
+        							<OnCursorChanged function="ScrollingEdit_OnCursorChanged"/>
+				        			<OnUpdate>
+        								ScrollingEdit_OnUpdate(self, elapsed, self:GetParent());
+        							</OnUpdate>
+        							<OnEscapePressed function="EditBox_ClearFocus"/>
+    									<OnEditFocusLost>
+    										GRM_AutoAdvertise["Memo"] = this:GetText();
+    									</OnEditFocusLost>
+    								</Scripts>
+    							</EditBox>
+								</ScrollChild>
+							</ScrollFrame>
+        			<Button name="GRM_AutoAdvertisingMemo_TextButton">
+        				<Size>
+        					<AbsDimension x="460" y="135"/>
+        				</Size>
+        				<Anchors>
+        					<Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMemo_Text"/>
+        				</Anchors>
+        				<Scripts>
+        					<OnClick>
+        						GRM_AutoAdvertisingMemo_Text:SetFocus();
+        					</OnClick>
+        				</Scripts>
+        			</Button>
+								</Frames>
+							</Frame>
+
+							<Button name="GRM_AutoAdvertising_Button" inherits="OptionsButtonTemplate" text="Start Adv">
+								<Size>
+									<AbsDimension x="80" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMsgScroll" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="40" y="3"/></Offset>
+								</Anchor></Anchors>
+            		<Scripts>
+            		  <OnLoad>
+            		  </OnLoad>
+            		  <OnShow>
+            		  </OnShow>
+            			<OnClick>
+            				PlaySound("gsTitleOptionOK");
+            				GRM_AutoAdvertisingChannelText1:ClearFocus();
+            				GRM_AutoAdvertisingChannelText2:ClearFocus();
+            				GRM_AutoAdvertisingChannelText3:ClearFocus();
+            				GRM_AutoAdvertisingIntervalText:ClearFocus();
+            				GRM_AutoAdvertisingMsg_Text:ClearFocus();
+            				GRM_AutoAdvertise["Msg"] = GRM_AutoAdvertisingMsg_Text:GetText();
+            				GRM_Advertising_Start();
+            			</OnClick>
+            		</Scripts>
+							</Button>
+
+							<Button name="GRM_Advertising_Button" inherits="OptionsButtonTemplate" text="Instant Adv">
+								<Size>
+									<AbsDimension x="80" y="28"/>
+								</Size>
+								<Anchors><Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMsgScroll" relativePoint="TOPRIGHT">
+									<Offset><AbsDimension x="40" y="-30"/></Offset>
+								</Anchor></Anchors>
+            		<Scripts>
+            			<OnClick>
+            				PlaySound("gsTitleOptionOK");
+            				GRM_AutoAdvertisingChannelText1:ClearFocus();
+            				GRM_AutoAdvertisingChannelText2:ClearFocus();
+            				GRM_AutoAdvertisingChannelText3:ClearFocus();
+            				GRM_AutoAdvertisingIntervalText:ClearFocus();
+            				GRM_AutoAdvertisingMsg_Text:ClearFocus();
+                    GRM_AutoAdvertise["Msg"] = GRM_AutoAdvertisingMsg_Text:GetText();
+                    GRM_AllChannelChat();
+            			</OnClick>
+            		</Scripts>
+							</Button>
+
+						</Frames>
+					</Frame>
+				</Frames>      
+			</Frame>  
+
+            <!-- 탭버튼 -->               
+			<Button name="$parentTab1" inherits="GRM_TabButtonTemplate" id="1">
+				<Anchors><Anchor point="TOPLEFT">
+					<Offset><AbsDimension x="10" y="-30"/></Offset>
+				</Anchor></Anchors>
+			</Button>   
+   
+			<Button name="$parentTab2" inherits="GRM_TabButtonTemplate" id="2">
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT"></Anchor>
+				</Anchors>
+			</Button>
+
+			<Button name="$parentTab3" inherits="GRM_TabButtonTemplate" id="3">
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentTab2" relativePoint="RIGHT"></Anchor>
+				</Anchors>
+			</Button>
+
+			<Button name="$parentTab4" inherits="GRM_TabButtonTemplate" id="4">
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentTab3" relativePoint="RIGHT"></Anchor>
+				</Anchors>
+			</Button>
+
+			<Button name="$parentTab5" inherits="GRM_TabButtonTemplate" id="5">
+				<Anchors>
+					<Anchor point="LEFT" relativeTo="$parentTab4" relativePoint="RIGHT"></Anchor>
+				</Anchors>
+			</Button>
+
+		</Frames>
+
+		<Scripts>
+			<OnLoad>
+				GRM_OnLoad();
+			</OnLoad>
+			<OnMouseDown>
+				if (arg1 == "LeftButton") then
+					this:StartMoving();
+				end
+			</OnMouseDown>
+			<OnMouseUp>
+				if (arg1 == "LeftButton") then
+					this:StopMovingOrSizing();
+				end
+			</OnMouseUp>
+			<OnEvent>
+				GRM_OnEvent(event, arg1);
+			</OnEvent>
+			<OnShow>
+				PlaySound("igCharacterInfoOpen");
+			</OnShow>
+			<OnHide>
+				PlaySound("igCharacterInfoClose");
+			</OnHide>
+		</Scripts>
+	</Frame>
+
+
+<!-- 루팅프레임에 버튼 삽입 -->
+	<Button name="GRM_LootButton" inherits="OptionsButtonTemplate" text="Announce Loot" parent="LootFrame">
+		<Anchors>
+			<Anchor point="BOTTOM" relativeTo="LootFrame" relativePoint="TOP"/>
+		</Anchors>
+		<Scripts>
+			<OnClick>
+				GRM_LootButtonOnClick();
+			</OnClick>
+		</Scripts>
+	</Button>
+</Ui>

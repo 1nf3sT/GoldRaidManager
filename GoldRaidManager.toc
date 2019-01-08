@@ -1,0 +1,14 @@
+## Interface: 20400
+## Title: GoldRaidManager
+## Title-koKR: [|cFFFFFFFFRaid|r] Gold Raid Manager 3.3.x
+## Author: KR-Stormrage Horde Sharha // Translator: US-Blackrock Alliance Onehan
+## Version: 3.3.1.100119
+## Notes: Managing Gold for Raid Reader
+## Notes-koKR: 막공에서 획득한 골드를 관리해줍니다.
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariablesPerCharacter: GRM_Options
+## SavedVariables: GRM_RaidLog, GRM_AuctionTable, GRM_PriorList, GRM_BriefList, GRM_RaceOption, GRM_Option, GRM_AutoAdvertise
+
+GRM_Templete.xml
+GoldRaidManager.xml

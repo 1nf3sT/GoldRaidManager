@@ -1,0 +1,654 @@
+<Ui>
+<!-- 제목 폰트 템플릿 -->
+	<FontString	name="GRM_FontTemplate"	font="Fonts\2002.TTF" virtual="true">
+		<FontHeight>
+			<AbsValue val="20"/>
+		</FontHeight>
+		<Shadow>
+			<Offset>
+				<AbsDimension x="1" y="-1"/>
+			</Offset>
+			<Color r="0" g="0" b="0.6"/>
+						local item = getglobal("GRM_PriorItem"..partynum.."_Edit"):GetText();</Shadow>
+		<Color r="0" g="1" b="0.5"/>
+	</FontString>
+
+
+<!-- 브리핑 폰트 템플릿 -->
+	<FontString	name="GRM_BriefFontTemplate" font="Fonts\2002.TTF" virtual="true">
+		<FontHeight>
+			<AbsValue val="13"/>
+		</FontHeight>
+		<Shadow>
+			<Offset>
+				<AbsDimension x="1" y="-1"/>
+			</Offset>
+			<Color r="0" g="0" b="0.6"/>
+		</Shadow>
+		<Color r="0" g="1" b="0.5"/>
+	</FontString>
+
+
+<!-- 보더 템플릿 -->
+	<Frame name="GRM_Border" movable="true" virtual="true">
+		<Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+			<EdgeSize>
+				<AbsValue val="16"/>
+			</EdgeSize>
+			<TileSize>
+				<AbsValue val="16"/>
+			</TileSize>
+			<BackgroundInsets>
+				<AbsInset left="5" right="5" top="5" bottom="5"/>
+			</BackgroundInsets>
+		</Backdrop>
+		<Scripts>
+			<OnLoad>
+				this:SetBackdropBorderColor(1.0, 1.0, 1.0, 1.0);
+				this:SetBackdropColor(0.0, 0.0, 0.0, 0.8);
+			</OnLoad>
+		</Scripts>
+	</Frame>
+
+
+<!-- 버튼 템플릿 -->
+	<Button name="GRM_Button" inherits="GRM_Border" virtual="true">
+		<Layers>
+			<Layer>
+				<FontString name="$ParentText" inherits="GameFontNormal" wraponspaces="true" justifyH="CENTER">
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+					<Color r="1.0" g="1.0" b="1.0"/>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnEnter>
+				this:SetBackdropColor(1, 0, 0, 0.8);
+				this:RegisterForClicks("LeftButtonUp","RightButtonUp","MiddleButtonUp");
+			</OnEnter>
+			<OnLeave>
+				this:SetBackdropColor(0, 0, 0, 0.8);
+			</OnLeave>
+		</Scripts>
+	</Button>
+
+
+<!-- 체크버튼 템플릿 -->
+	<CheckButton name="GRM_CheckButtonTemplate" inherits="OptionsCheckButtonTemplate" hidden="false" virtual="true">
+		<HitRectInsets>
+			<AbsInset left="0" right="0" top="0" bottom="0"/>
+		</HitRectInsets>
+		<Size>
+			<AbsDimension x="25" y="25"/>
+		</Size>			
+		<Scripts>
+			<OnLoad>
+				this.setting_name = string.gsub( this:GetName() , "GRM_Check_", "");
+				getglobal( this:GetName().."Text"):SetText( " "..GRM_locale[this.setting_name] );
+			</OnLoad>				
+			<OnClick>
+				GRM_ToggleConfig(this.setting_name);
+			</OnClick>
+			<OnShow>
+				getglobal(this:GetName()):SetChecked(GRM_GetConfig(this.setting_name));
+			</OnShow>
+			<OnEnter>
+				GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+				GameTooltip:SetText(GRM_locale[this.setting_name.."_tooltip"], 1, 1, 1, 1);
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide();
+			</OnLeave>					
+		</Scripts>
+	</CheckButton>
+
+
+<!-- 선입 아이템 체크버튼 템플릿 -->
+	<CheckButton name="GRM_PriorCheckButtonTemplate" inherits="OptionsCheckButtonTemplate" hidden="false" virtual="true">
+		<HitRectInsets>
+			<AbsInset left="0" right="0" top="0" bottom="0"/>
+		</HitRectInsets>
+		<Size>
+			<AbsDimension x="25" y="25"/>
+		</Size>			
+		<Scripts>
+			<OnLoad>
+			</OnLoad>				
+			<OnClick>
+				local partynum = string.match( this:GetName(), "(%d+)" );
+				local player = getglobal("GRM_PriorPlayer"..partynum.."_Text"):GetText();
+
+				GRM_PriorCheckButtonOnClick( player );
+			</OnClick>
+			<OnShow>
+				local partynum = string.match( this:GetName(), "(%d+)" );
+				local player = getglobal("GRM_PriorPlayer"..partynum.."_Text"):GetText();
+				local count = getglobal("GRM_PriorCount"..partynum.."_Edit"):GetText();
+
+				if ( GRM_PriorList and GRM_PriorList[player] ) then
+					getglobal(this:GetName()):SetChecked(GRM_PriorList[player].lootOK or (count ~= "" and tonumber(count) > 0));
+				end
+			</OnShow>
+		</Scripts>
+	</CheckButton>
+
+
+<!-- 라디오버튼 템플릿 -->
+	<CheckButton name="GRM_RadioButtonTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="16" y="16"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString name="$parentText" inherits="GameFontNormalSmall">
+					<Anchors>
+						<Anchor point="LEFT" relativePoint="RIGHT">
+							<Offset>
+								<AbsDimension x="1" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnShow>
+				this.setting_name = string.gsub( this:GetName() , "GRM_", "");
+				getglobal( this:GetName().."Text"):SetText( " "..GRM_locale[this.setting_name] );
+			</OnShow>				
+			<OnClick>
+			</OnClick>
+		</Scripts>
+		<NormalTexture file="Interface\Buttons\UI-RadioButton">
+			<TexCoords left="0" right="0.25" top="0" bottom="1"/>
+		</NormalTexture>
+		<HighlightTexture file="Interface\Buttons\UI-RadioButton" alphaMode="ADD">
+			<TexCoords left="0.5" right="0.75" top="0" bottom="1"/>
+		</HighlightTexture>
+		<CheckedTexture file="Interface\Buttons\UI-RadioButton">
+			<TexCoords left="0.25" right="0.5" top="0" bottom="1"/>
+		</CheckedTexture>
+	</CheckButton>
+
+
+<!-- 제목 글자 템플릿 -->
+	<Frame name="GRM_HeaderTemplate" hidden="false" virtual="true">
+		<Layers>
+			<Layer level="ARTWORK">
+				<FontString name="$parentText" inherits="GameFontHighlight" text=""></FontString>	
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+			</OnLoad>
+		</Scripts>
+	</Frame>
+
+
+<!-- 탭 버튼 템플릿 -->
+	<Button name="GRM_TabButtonTemplate" virtual="true">
+		<Size><AbsDimension x="80" y="32"/></Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture name="$parentLeftDisabled" file="Interface\AddOns\GoldRaidManager\images\tab1">
+					<Size><AbsDimension x="55" y="50"/></Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT">
+							<Offset><AbsDimension x="0" y="-25"/></Offset>
+						</Anchor>
+					</Anchors>
+					<TexCoords left="0" right="0.20" top="0" bottom="1.0"/>
+				</Texture>
+				<Texture name="$parentMiddleDisabled" file="Interface\AddOns\GoldRaidManager\images\tab1">
+					<Size><AbsDimension x="12" y="50"/></Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentLeftDisabled" relativePoint="RIGHT"/>
+					</Anchors>
+					<TexCoords left="0.20" right="0.80" top="0" bottom="1.0"/>
+				</Texture>
+				<Texture name="$parentRightDisabled" file="Interface\AddOns\GoldRaidManager\images\tab1">
+					<Size><AbsDimension x="12" y="50"/></Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentMiddleDisabled" relativePoint="RIGHT"/>
+					</Anchors>
+					<TexCoords left="0.80" right="1.0" top="0" bottom="1.0"/>
+				</Texture>
+				<Texture name="$parentLeft" file="Interface\AddOns\GoldRaidManager\images\tab2">
+					<Size><AbsDimension x="55" y="50"/></Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT">
+							<Offset>
+								<AbsDimension x="0" y="-25"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+					<TexCoords left="0" right="0.20" top="0" bottom="1.0"/>
+				</Texture>
+				<Texture name="$parentMiddle" file="Interface\AddOns\GoldRaidManager\images\tab2">
+					<Size><AbsDimension x="12" y="50"/></Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentLeft" relativePoint="RIGHT"/>
+					</Anchors>
+					<TexCoords left="0.20" right="0.80" top="0" bottom="1.0"/>
+				</Texture>
+				<Texture name="$parentRight" file="Interface\AddOns\GoldRaidManager\images\tab2">
+					<Size><AbsDimension x="12" y="50"/></Size>
+					<Anchors>
+						<Anchor point="LEFT" relativeTo="$parentMiddle" relativePoint="RIGHT"/>
+					</Anchors>
+					<TexCoords left="0.80" right="1.0" top="0" bottom="1.0"/>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString name="$parentText" inherits="GameFontNormalSmall">
+					<Anchors>
+						<Anchor point="BOTTOM">
+							<Offset><AbsDimension x="0" y="8"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentHighlightText" inherits="GameFontHighlightSmall" hidden="true">
+					<Anchors>
+						<Anchor point="BOTTOM">
+							<Offset><AbsDimension x="0" y="8"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+				<FontString name="$parentDisabledText" inherits="GameFontGreenSmall" hidden="true">
+					<Anchors>
+						<Anchor point="BOTTOM">
+							<Offset><AbsDimension x="0" y="8"/></Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				getglobal(this:GetName().."Text"):SetText(GRM_locale[this:GetName()]);
+				getglobal(this:GetName().."HighlightText"):SetText(GRM_locale[this:GetName()]);
+				getglobal(this:GetName().."DisabledText"):SetText(GRM_locale[this:GetName()]);
+				<!--PanelTemplates_TabResize(self,0);-->
+			</OnLoad>
+			<OnEnter>
+				getglobal(this:GetName().."Text"):Hide();
+				getglobal(this:GetName().."HighlightText"):Show();
+			</OnEnter>
+			<OnLeave>
+				getglobal(this:GetName().."Text"):Show();
+				getglobal(this:GetName().."HighlightText"):Hide();
+			</OnLeave>
+			<OnClick>
+				PanelTemplates_SetTab(GRM_MainFrame, this:GetID());
+				for i=1, GRM_NUMTABS do
+					if i == this:GetID() then
+						getglobal(this:GetName().."Text"):Hide();
+						getglobal(this:GetName().."HighlightText"):Hide();
+						getglobal(this:GetName().."DisabledText"):Show();
+						getglobal("GRM_Tab"..i):Show();
+					else
+						getglobal("GRM_MainFrameTab"..i.."Text"):Show();
+						getglobal("GRM_MainFrameTab"..i.."HighlightText"):Hide();
+						getglobal("GRM_MainFrameTab"..i.."DisabledText"):Hide();
+						getglobal("GRM_Tab"..i):Hide();
+					end
+				end
+			</OnClick>
+		</Scripts>
+	</Button>
+
+
+<!-- 드롭다운 버튼 템플릿 -->
+	<Frame name="GRM_DropdownTemplate" inherits="UIDropDownMenuTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="128" y="16"/>
+		</Size>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<FontString name="$parentLabel" inherits="GameFontNormalSmall" justifyH="RIGHT">
+					<Anchors>
+						<Anchor point="TOPRIGHT" relativePoint="TOPLEFT">
+							<Offset>
+								<AbsDimension x="21" y="0"/>
+							</Offset>
+						</Anchor>
+					</Anchors>
+				</FontString>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+			</OnLoad>
+			<OnEnter>
+				if ( this.tooltipText ) then
+					GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+					GameTooltip:SetText(this.tooltipText, nil, nil, nil, nil, 1);
+				end
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide();
+			</OnLeave>
+		</Scripts>
+	</Frame>
+
+<!-- 슬라이더 템플릿 -->
+    <Slider name="GRM_SliderTemplate" inherits="OptionsSliderTemplate" hidden="false" virtual="true">
+        <Size><AbsDimension x="155" y="16"/></Size>	
+        <Anchors><Anchor point="TOPLEFT" relativePoint="TOPLEFT" relativeTo="$parent">
+        	<Offset><AbsDimension x="0" y="0"/></Offset>
+        </Anchor></Anchors>
+        <Scripts>
+            <OnLoad>
+                GRM_Slider_OnLoad( 1, 4, 1 );
+            </OnLoad>
+            <OnShow>
+                GRM_Slider_OnShow( this.setting_name , (GRM_locale[this.setting_name] or "") );
+            </OnShow>
+            <OnValueChanged>
+                GRM_Slider_OnValueChanged( this.setting_name, (GRM_locale[this.setting_name] or "") );
+            </OnValueChanged>
+            <OnEnter>
+                GameTooltip:SetOwner(this, "ANCHOR_RIGHT");
+                GameTooltip:SetText((GRM_locale[this.setting_name.."_tooltip"] or ""), 1, 1, 1, 1);
+            </OnEnter>
+            <OnLeave>
+                GameTooltip:Hide();
+            </OnLeave>	    
+        </Scripts>
+    </Slider>
+
+<!-- 입력상자 템플릿 -->
+	<EditBox name="GRM_EditBoxTemplate" historyLines="0" autoFocus="false" virtual="true">
+        <Size>
+            <AbsDimension x="165" y="20"/>
+        </Size>
+        <Anchors>
+            <Anchor point="LEFT" relativeTo="GRM_MainFrame" relativePoint="RIGHT">
+                <Offset>
+                    <AbsDimension x="3" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Layers>
+            <Layer level="BACKGROUND">
+                <Texture name="$parentLeft" file="Interface\Common\Common-Input-Border">
+                    <Size>
+                        <AbsDimension x="8" y="20"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="TOPLEFT">
+                            <Offset>
+                                <AbsDimension x="-5" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                    <TexCoords left="0" right="0.0625" top="0" bottom="0.625"/>
+                </Texture>
+                <Texture name="$parentRight" file="Interface\Common\Common-Input-Border">
+                    <Size>
+                        <AbsDimension x="8" y="20"/>
+                    </Size>
+                    <Anchors>
+						<Anchor point="RIGHT"/>
+                    </Anchors>
+                    <TexCoords left="0.9375" right="1.0" top="0" bottom="0.625"/>
+                </Texture>
+                <Texture name="$parentMiddle" file="Interface\Common\Common-Input-Border">
+                    <Size>
+                        <AbsDimension x="10" y="20"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="LEFT" relativeTo="$parentLeft" relativePoint="RIGHT"/>
+                        <Anchor point="RIGHT" relativeTo="$parentRight" relativePoint="LEFT"/>
+                    </Anchors>
+                    <TexCoords left="0.0625" right="0.9375" top="0" bottom="0.625"/>
+                </Texture>
+            </Layer>
+        </Layers>
+        <Scripts>
+            <OnLoad>
+            this:SetCursorPosition(0);
+            </OnLoad>
+            <OnTextSet>
+            this:SetCursorPosition(0);
+            </OnTextSet>
+            <OnEnterPressed>
+                this:ClearFocus();
+            </OnEnterPressed>
+            <OnEscapePressed>
+                this:ClearFocus();
+            </OnEscapePressed>
+            <OnTextChanged>
+            </OnTextChanged> 
+            <OnEditFocusLost>
+                this:HighlightText(0, 0);
+                this:SetCursorPosition(0);
+            </OnEditFocusLost>
+            <OnEditFocusGained>
+                this:SetCursorPosition(0);
+                this:HighlightText();
+            </OnEditFocusGained>
+        </Scripts>
+        <FontString inherits="ChatFontNormal"/>
+    </EditBox>
+
+<!-- 숫자 입력상자 템플릿 -->
+	<EditBox name="GRM_NumberEditBoxTemplate" inherits="GRM_EditBoxTemplate" letter="16" numeric="true" virtual="true">
+        <Size>
+            <AbsDimension x="50" y="20"/>
+        </Size>
+		<Script>
+			<OnLoad>
+				this:SetJustifyH("RIGHT");
+			</OnLoad>
+		</Script>
+	</EditBox>
+
+<!-- 플레이어 입력상자 템플릿 -->
+	<EditBox name="GRM_PlayerEditBoxTemplate" inherits="GRM_EditBoxTemplate" virtual="true">
+		<Size>
+            <AbsDimension x="150" y="20"/>
+        </Size>
+	</EditBox>
+
+<!-- 커스텀 브리핑 제목 입력상자 템플릿 -->
+	<EditBox name="GRM_BriefTitleEditBoxTemplate" inherits="GRM_EditBoxTemplate" virtual="true">
+		<Size>
+            <AbsDimension x="140" y="20"/>
+        </Size>
+	</EditBox>
+
+<!-- 여러 플레이어 입력상자 템플릿 -->
+	<EditBox name="GRM_DualPlayerEditBoxTemplate" inherits="GRM_EditBoxTemplate" virtual="true">
+		<Size>
+            <AbsDimension x="220" y="20"/>
+        </Size>
+	</EditBox>
+
+<!-- 네임드 이름 입력상자 템플릿 -->
+	<EditBox name="GRM_NamedEditBoxTemplate" inherits="GRM_EditBoxTemplate" virtual="true">
+		<Size>
+            <AbsDimension x="200" y="20"/>
+        </Size>
+	</EditBox>		
+
+<!-- 네임드에서 획득한 아이템 입력상자 템플릿 -->
+	<EditBox name="GRM_NamedItemEditBoxTemplate" inherits="GRM_EditBoxTemplate" virtual="true">
+		<Scripts>
+      <OnTabPressed>
+				this:ClearFocus();
+				
+				local goldEdit = string.gsub( this:GetName(), "Named", "NamedGold" );
+				getglobal(goldEdit):SetFocus();
+			</OnTabPressed>
+			<OnEnter>
+				index = string.gsub( this:GetName(), "GRM_Named_Edit", "" );
+				GameTooltip:SetOwner(this, "ANCHOR_LEFT");
+				GRM_ShowTooltip(index);
+			</OnEnter>
+			<OnLeave>
+				GameTooltip:Hide();
+			</OnLeave>
+		</Scripts>
+	</EditBox>
+
+<!-- 네임드에서 획득한 골드 입력상자 템플릿 -->
+	<EditBox name="GRM_NamedGoldEditBoxTemplate" inherits="GRM_NumberEditBoxTemplate" virtual="true">
+		<Scripts>
+        	<OnTabPressed>
+				this:ClearFocus();
+
+				local index = string.match( this:GetName(), "GRM_NamedGold_Edit(%d)" );
+				local nextIndex = tonumber(index) + 1;
+				if ( nextIndex == 9 ) then
+					nextIndex = 1;
+				end
+
+				getglobal("GRM_Named_Edit"..nextIndex):SetFocus();
+			</OnTabPressed>
+		</Scripts>
+	</EditBox>	
+
+<!-- 선입아이템 입력상자 템플릿 -->
+	<EditBox name="GRM_PriorItemEditBoxTemplate" inherits="GRM_EditBoxTemplate" virtual="true">
+		<Size>
+            <AbsDimension x="135" y="20"/>
+        </Size>
+		<Scripts>
+			<OnTabPressed>
+				this:ClearFocus();
+
+				local partynum = string.match( this:GetName(), "(%d+)" );
+				getglobal("GRM_PriorCount"..partynum.."_Edit"):SetFocus();
+			</OnTabPressed>
+			<OnEditFocusLost>
+                this:HighlightText(0, 0);
+				
+				local partynum = string.match( this:GetName(), "(%d+)" );
+				local player = getglobal("GRM_PriorPlayer"..partynum.."_Text"):GetText();
+				local count = getglobal("GRM_PriorCount"..partynum.."_Edit"):GetText();
+
+				if ( player ) then
+					GRM_PriorList_Update( player, this:GetText(), count, partynum );
+				end
+            </OnEditFocusLost>
+		</Scripts>
+	</EditBox>
+
+
+<!-- 뒷거래횟수 입력상자 템플릿 -->
+	<EditBox name="GRM_PriorCountEditBoxTemplate" inherits="GRM_NumberEditBoxTemplate" virtual="true">
+		<Size>
+            <AbsDimension x="20" y="20"/>
+        </Size>
+		<Scripts>
+			<OnTabPressed>
+				this:ClearFocus();
+
+				local partynum = tonumber(string.match( this:GetName(), "(%d+)" ));
+				if ( partynum  == 55 ) then
+					nextpartynum = 11;
+				elseif ( partynum % 5 == 0 ) then
+					nextpartynum = partynum + 6;
+				else
+					nextpartynum = partynum + 1;
+				end
+
+				getglobal("GRM_PriorItem"..nextpartynum.."_Edit"):SetFocus();
+			</OnTabPressed>
+			<OnEditFocusLost>
+                this:HighlightText(0, 0);
+				
+				local partynum = string.match( this:GetName(), "(%d+)" );
+				local player = getglobal("GRM_PriorPlayer"..partynum.."_Text"):GetText();
+				local item = getglobal("GRM_PriorItem"..partynum.."_Edit"):GetText();
+
+				if ( player ) then
+					GRM_PriorList_Update( player, item, this:GetText(), partynum );
+				end
+            </OnEditFocusLost>
+		</Scripts>
+	</EditBox>
+
+
+<!-- 경매 시작 버튼 템플릿 -->
+	<Button name="GRM_AuctionButtonTemplate" inherits="OptionsButtonTemplate" virtual="true">
+		<Size>
+			<AbsDimension x="65" y="20"/>
+		</Size>
+		<Scripts>
+		  <OnLoad>
+				index = string.gsub( this:GetName(), "GRM_Auction_Button", "" );
+				if( GRM_Auction_ItemNum ) then
+          getglobal( "GRM_Auction_Button"..GRM_Auction_ItemNum ):SetText("["..GRM_Auction_ItemNum.."] End");
+        else
+          getglobal( "GRM_Auction_Button"..index ):SetText("["..index.."] Start");
+        end
+		  </OnLoad>
+			<OnClick>
+				index = string.gsub( this:GetName(), "GRM_Auction_Button", "" );
+				PlaySound("gsTitleOptionOK");
+				GRM_Auction_Start(index);
+			</OnClick>
+		</Scripts>
+	</Button>
+
+
+<!-- 리스트 버튼 템플릿 -->
+	<Button name="GRM_MainList_Template" virtual="true">
+		<Size>
+			<AbsDimension x="170" y="18" />
+		</Size>
+		<Layers>
+			<Layer level="BORDER">
+				<FontString name="$parent_Text" inherits="GameFontHighlight" wraponspaces="false" justifyH="LEFT">
+          <Size><AbsDimension x="130" y="18" /></Size>
+				</FontString>
+				<FontString name="$parent_Gold" inherits="GameFontHighlight" hidden="false" justifyH="RIGHT"/>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				this:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+			</OnLoad>
+			<OnClick>
+				GRM_MainListOnClick( this:GetName() );
+			</OnClick>
+		</Scripts>
+		<HighlightTexture file="Interface\QuestFrame\UI-QuestTitleHighlight" alphaMode="ADD"/>
+	</Button>
+
+	<Button name="GRM_BriefList_Template" virtual="true">
+		<Size>
+			<AbsDimension x="140" y="18" />
+		</Size>
+		<Layers>
+			<Layer level="BORDER">
+				<FontString name="$parent_Text" inherits="GameFontHighlight" wraponspaces="false" justifyH="LEFT"/>
+			</Layer>
+		</Layers>
+		<Scripts>
+			<OnLoad>
+				this:RegisterForClicks("LeftButtonUp", "RightButtonUp");
+			</OnLoad>
+			<OnClick>
+				GRM_BriefListOnClick();
+			</OnClick>
+		</Scripts>
+		<HighlightTexture file="Interface\QuestFrame\UI-QuestTitleHighlight" alphaMode="ADD"/>
+	</Button>	
+
+<!-- 선입리스트 버튼 템플릿 -->
+	<Button name="GRM_PriorList_Template" virtual="true">
+		<Size>
+			<AbsDimension x="95" y="20" />
+		</Size>
+		<Layers>
+			<Layer level="BORDER">
+				<FontString name="$parent_Text" inherits="GameFontHighlight" wraponspaces="false" justifyH="CENTER"/>
+			</Layer>
+		</Layers>
+	</Button>
+</Ui>
