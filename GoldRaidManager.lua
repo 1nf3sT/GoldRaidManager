@@ -33,7 +33,6 @@ local GRM_ClassColor = {
 	["Rogue"]			= "FFFFF569",
 	["Hunter"]			= "FFABD473",
 	["Paladin"]			= "FFF58CBA",
-	["Death Knight"]	= "FFFF0000",
 }
 
 -- 7,8 방어구 토큰 이름 7,8 Armor Token Name
