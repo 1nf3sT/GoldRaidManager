@@ -253,9 +253,9 @@ function GRM_OnLoad()
 		DEFAULT_CHAT_FRAME:AddMessage("Command: /grm /goldraidmanager", 1.0, 1.0, 0.0, 1);
 	end
 	
-	if (UIErrorsFrame) then
-	  UIErrorsFrame:AddMessage( "GoldRaidManager - v"..GRM_VERSION.." Loaded.\n "..GRM_AUTHOR, 1.0, 1.0, 0.0, 1, 5 );
-	end
+	--if (UIErrorsFrame) then
+	--  UIErrorsFrame:AddMessage( "GoldRaidManager - v"..GRM_VERSION.." Loaded.\n "..GRM_AUTHOR, 1.0, 1.0, 0.0, 1, 5 );
+	--end
 end
 
 -- 슬래쉬 명령어 핸들러 Slash command handler-------------------------
