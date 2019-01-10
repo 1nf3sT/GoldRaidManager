@@ -2340,7 +2340,7 @@ function GRM_UpdateBriefing()
 	end
 
 	if ( voidCrystalCount > 0 ) then
-		msg = msg .. GRM_locale.BriefMsgSingleLine .. "Abyss Crystal: " .. voidCrystalCount .. "\n";
+		msg = msg .. GRM_locale.BriefMsgSingleLine .. "Void Crystals: " .. voidCrystalCount .. "\n";
 	end
 
 	-- 레이드 인원점검, 무득골팟인지 확인 Check for raid personnel

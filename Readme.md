@@ -1,5 +1,8 @@
 GoldRaidManager 3.3.x 10.0.1.19 backported to WoW TBC 2.4.3
 
+Youtube video explaning how to use the addon:
+https://youtu.be/2FiXr4XQkHk
+
 Can handle all aspects of a Gold DKP (GDKP) run:
 Auction Tab:		Auctioning items, splitting gold between the amount of boosters you set, disenchanting if no bets and only if available. 
 Briefing Tab:		Store many different briefing messages and output to raid on-demand. 
