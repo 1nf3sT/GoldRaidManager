@@ -22,7 +22,7 @@ but from reading through all the code I'm confident in realising it as is.
 * If your client crashes during the raid, the addon can't store the data and all the logs will be gone. 
   If you get disconnected the addon will store the data and you can then relog and keep going. 
 * When using with /stopwatch or /timer, the auction count does not work normally.
-* I can't figure out how the Gold per Deal (Gold Log) part of Reserve Log works and I need help to understand what it's supposed to work in order to translate it.
+* I can't figure out how the Gold per Deal (Gold Log) part of Reserve Log works and I need help to understand what it's supposed to do in order to translate it.
   Recommend not using Gold per Deal ("Gold Log" and "Reserve (Player) Log" button under "Reserve Log" until it's properly translated. 
 
 **Known bugs:**
