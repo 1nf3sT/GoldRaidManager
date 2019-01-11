@@ -15,8 +15,6 @@
 
 [A read on GDKP runs in general](https://www.engadget.com/2010/06/14/gold-capped-gdkp-raiding-for-fun-and-profit/)
 
-**_Be aware!_** At this point in time the addon hasn't been tested other than just standing around testing the interface and the few lua errors I encountered,
-but from reading through all the code I'm confident in realising it as is. 
 
 **Known issues:**
 * If your client crashes during the raid, the addon can't store the data and all the logs will be gone. 
@@ -28,9 +26,11 @@ but from reading through all the code I'm confident in realising it as is.
 **Known bugs:**
 * Advertising message doesn't display the text you type and doesn't copy the text to the no input Memo box. It Still works, you are just typing blindly. 
 * Clicking on "Instant Adv" in the Auto Advertise Tab while no message is entered, doesn't respond with an error message, outputs blank text in chat. 
+* Lua error upon looting a corpse can appear, probably due to Loot Log doesn't seem to show the text.
+* Loot log doesn't show text in window. Chat output still works. 
 
 **Things to do:**
-- [ ] Support for teksloot
 - [ ] Fix the Auto Advertise Tab
 - [ ] Fix the Instant Adv button to display error message
 - [ ] Figure out how Gold per Deal is supposed to be used, so it can be translated properly and documentated. 
+- [ ] Fix Loot Log window to display text. 
