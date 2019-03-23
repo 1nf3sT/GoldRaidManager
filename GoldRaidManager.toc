@@ -3,7 +3,7 @@
 ## Title-koKR: [|cFFFFFFFFRaid|r] Gold Raid Manager 3.3.x
 ## Author: KR-Stormrage Horde Sharha // Translator: US-Blackrock Alliance Onehan
 ## Version: 3.3.1.100119
-## Notes: Managing Gold for Raid Reader
+## Notes: Managing Gold split for Raid leaders
 ## Notes-koKR: 막공에서 획득한 골드를 관리해줍니다.
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
