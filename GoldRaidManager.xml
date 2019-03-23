@@ -2275,7 +2275,9 @@
         						</Scripts>
 							</EditBox>
 
-							<Frame name="GRM_AutoAdvertisingMsgFrame" hidden="false">
+							<!-- Same changes to both scrollframes, only commented in the first one -->
+							
+<Frame name="GRM_AutoAdvertisingMsgFrame" hidden="false">
 								<Size>
 									<AbsDimension x="400" y="70"/>
 								</Size>
@@ -2295,71 +2297,79 @@
 								</Backdrop>
 								<Frames>
 							<!-- 스크롤 프레임 -->
-							<ScrollFrame name="GRM_AutoAdvertisingMsgScroll" inherits="UIPanelScrollFrameTemplate">
-								<Anchors><Anchor point="TOP">
-									<Offset><AbsDimension x="-10" y="-8"/></Offset>
-								</Anchor></Anchors>
-								<Size>
-									<AbsDimension x="360" y="55"/>
-								</Size>
-								<ScrollChild>
-    							<EditBox name="GRM_AutoAdvertisingMsg_Text" letters="255" multiLine="true" autoFocus="false">
-    								<Size>
-    									<AbsDimension x="360" y="55"/>
-    								</Size>
-    								<FontString inherits="SystemFont_Med1">
+                            <!-- added toplevel="true" - might be that way by default
+                                 the only change made to msg that was not made to memo -->
+                            <ScrollFrame name="GRM_AutoAdvertisingMsgScroll" inherits="UIPanelScrollFrameTemplate" toplevel="true">
+                                <Anchors><Anchor point="TOP">
+                                    <Offset><AbsDimension x="-10" y="-8"/></Offset>
+                                </Anchor></Anchors>
+                                <Size>
+                                    <AbsDimension x="360" y="55"/>
+                                </Size>
+                                <ScrollChild>
+                                <EditBox name="GRM_AutoAdvertisingMsg_Text" letters="255" multiLine="true" autoFocus="false"
+                    enableMouse="true" enableKeyboard="true">
+                                    <Size>
+                                        <AbsDimension x="360" y="55"/>
+                                    </Size>
+                    <!-- inherits:ChatFontNormal instead of SystemFont_Med1 -->
+                                    <FontString inherits="ChatFontNormal"/>
+                    <!-- The code below was within the FontString tag
                       <FontHeight>
-                      	<AbsValue val="13"/>
+                        <AbsValue val="13"/>
                       </FontHeight>
-    									<Shadow>
-                  			<Offset>
-                  				<AbsDimension x="1" y="-1"/>
-                  			</Offset>
-                  			<Color r="0" g="0" b="0.6"/>
-                  		</Shadow>
-                  		<Color r="0" g="1" b="0.5"/>
-                  	</FontString>
-    								<Scripts>
-    									<OnLoad>
-	        						this:SetJustifyV("TOP");
-    									</OnLoad>
-    									<OnTextChanged>
-    									ScrollingEdit_OnTextChanged(self, self:GetParent());
-    									</OnTextChanged>
-    									<OnTabPressed>
-    										this:ClearFocus();
-    									</OnTabPressed>
+                      <Shadow>
+                        <Offset>
+                          <AbsDimension x="1" y="-1"/>
+                        </Offset>
+                        <Color r="0" g="0" b="0.6"/>
+                      </Shadow>
+                      <Color r="0" g="1" b="0.5"/>
+                     -->
+                                    <Scripts>
+                                        <OnLoad>
+                                    this:SetJustifyV("TOP");
+                                        </OnLoad>
+                                        <OnTextChanged>
+                        <!--
+Look into this...could be some sort of a problem here...
+                        -->
+                                        ScrollingEdit_OnTextChanged(self, self:GetParent());
+                                        </OnTextChanged>
+                                        <OnTabPressed>
+                                            this:ClearFocus();
+                                        </OnTabPressed>
                       <OnEnterPressed>
                           this:ClearFocus();
                       </OnEnterPressed>
-        							<OnCursorChanged function="ScrollingEdit_OnCursorChanged"/>
-				        			<OnUpdate>
-        								ScrollingEdit_OnUpdate(self, elapsed, self:GetParent());
-        							</OnUpdate>
-        							<OnEscapePressed function="EditBox_ClearFocus"/>
-        							<OnEditFocusGained>
-          					  GRM_Advertising_CheckStop();
-        							</OnEditFocusGained>
-    									<OnEditFocusLost>
-    										GRM_AutoAdvertise["Msg"] = this:GetText();
-    									</OnEditFocusLost>
-    								</Scripts>
-    							</EditBox>
-								</ScrollChild>
-							</ScrollFrame>
-        			<Button name="GRM_AutoAdvertisingMsg_TextButton">
-        				<Size>
-        					<AbsDimension x="360" y="55"/>
-        				</Size>
-        				<Anchors>
-        					<Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMsg_Text"/>
-        				</Anchors>
-        				<Scripts>
-        					<OnClick>
-        						GRM_AutoAdvertisingMsg_Text:SetFocus();
-        					</OnClick>
-        				</Scripts>
-        			</Button>
+                                    <OnCursorChanged function="ScrollingEdit_OnCursorChanged"/>
+                                    <OnUpdate>
+                                        ScrollingEdit_OnUpdate(self, elapsed, self:GetParent());
+                                    </OnUpdate>
+                                    <OnEscapePressed function="EditBox_ClearFocus"/>
+                                    <OnEditFocusGained>
+                              GRM_Advertising_CheckStop();
+                                    </OnEditFocusGained>
+                                        <OnEditFocusLost>
+                                            GRM_AutoAdvertise["Msg"] = this:GetText(); <!-- this is the method that sends the data to the lua(terminology might be shite) -->
+                                        </OnEditFocusLost>
+                                    </Scripts>
+                                </EditBox>
+                                </ScrollChild>
+                            </ScrollFrame>
+                    <Button name="GRM_AutoAdvertisingMsg_TextButton">
+                        <Size>
+                            <AbsDimension x="360" y="55"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMsg_Text"/>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>
+                                GRM_AutoAdvertisingMsg_Text:SetFocus();
+                            </OnClick>
+                        </Scripts>
+                    </Button>
 								</Frames>
 							</Frame>
 
@@ -2383,65 +2393,66 @@
 								</Backdrop>
 								<Frames>							
 							<ScrollFrame name="GRM_AutoAdvertisingMemoScroll" inherits="UIPanelScrollFrameTemplate" toplevel="true">
-								<Anchors><Anchor point="TOP">
-									<Offset><AbsDimension x="-10" y="-8"/></Offset>
-								</Anchor></Anchors>
-								<Size>
-									<AbsDimension x="460" y="135"/>
-								</Size>
-								<ScrollChild>
-    							<EditBox name="GRM_AutoAdvertisingMemo_Text" letters="99999" multiLine="true" autoFocus="false">
-    								<Size>
-    									<AbsDimension x="460" y="135"/>
-    								</Size>
-    								<FontString inherits="SystemFont_Med1">
-                      <FontHeight>
-                      	<AbsValue val="13"/>
+                                <Anchors><Anchor point="TOP">
+                                    <Offset><AbsDimension x="-10" y="-8"/></Offset>
+                                </Anchor></Anchors>
+                                <Size>
+                                    <AbsDimension x="460" y="135"/>
+                                </Size>
+                                <ScrollChild>
+                                <EditBox name="GRM_AutoAdvertisingMemo_Text" letters="99999" multiLine="true" autoFocus="false"
+                    enableMouse="true" enableKeyboad="true">
+                                    <Size>
+                                        <AbsDimension x="460" y="135"/>
+                                    </Size>
+                                    <FontString inherits="ChatFontNormal"/>
+                      <!--<FontHeight>
+                        <AbsValue val="13"/>
                       </FontHeight>
-    									<Shadow>
-                  			<Offset>
-                  				<AbsDimension x="1" y="-1"/>
-                  			</Offset>
-                  			<Color r="0" g="0" b="0.6"/>
-                  		</Shadow>
-                  		<Color r="0" g="1" b="0.5"/>
-                  	</FontString>
-    								<Scripts>
-    									<OnLoad>
-	        						this:SetJustifyV("TOP");
-    									</OnLoad>
-    									<OnTextChanged>
-    									ScrollingEdit_OnTextChanged(self, self:GetParent());
-    									</OnTextChanged>
-    									<OnTabPressed>
-    									  GRM_AutoAdvertise["Msg"] = this:GetText();
-    										this:ClearFocus();    										
-    									</OnTabPressed>
-        							<OnCursorChanged function="ScrollingEdit_OnCursorChanged"/>
-				        			<OnUpdate>
-        								ScrollingEdit_OnUpdate(self, elapsed, self:GetParent());
-        							</OnUpdate>
-        							<OnEscapePressed function="EditBox_ClearFocus"/>
-    									<OnEditFocusLost>
-    										GRM_AutoAdvertise["Memo"] = this:GetText();
-    									</OnEditFocusLost>
-    								</Scripts>
-    							</EditBox>
-								</ScrollChild>
-							</ScrollFrame>
-        			<Button name="GRM_AutoAdvertisingMemo_TextButton">
-        				<Size>
-        					<AbsDimension x="460" y="135"/>
-        				</Size>
-        				<Anchors>
-        					<Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMemo_Text"/>
-        				</Anchors>
-        				<Scripts>
-        					<OnClick>
-        						GRM_AutoAdvertisingMemo_Text:SetFocus();
-        					</OnClick>
-        				</Scripts>
-        			</Button>
+                                        <Shadow>
+                            <Offset>
+                                <AbsDimension x="1" y="-1"/>
+                            </Offset>
+                            <Color r="0" g="0" b="0.6"/>
+                        </Shadow>
+                        <Color r="0" g="1" b="0.5"/>
+                    </FontString>-->
+                                    <Scripts>
+                                        <OnLoad>
+                                    this:SetJustifyV("TOP");
+                                        </OnLoad>
+                                        <OnTextChanged>
+                                        ScrollingEdit_OnTextChanged(self, self:GetParent());
+                                        </OnTextChanged>
+                                        <OnTabPressed>
+                                          GRM_AutoAdvertise["Msg"] = this:GetText();
+                                            this:ClearFocus();                                          
+                                        </OnTabPressed>
+                                    <OnCursorChanged function="ScrollingEdit_OnCursorChanged"/>
+                                    <OnUpdate>
+                                        ScrollingEdit_OnUpdate(self, elapsed, self:GetParent());
+                                    </OnUpdate>
+                                    <OnEscapePressed function="EditBox_ClearFocus"/>
+                                        <OnEditFocusLost>
+                                            GRM_AutoAdvertise["Memo"] = this:GetText();
+                                        </OnEditFocusLost>
+                                    </Scripts>
+                                </EditBox>
+                                </ScrollChild>
+                            </ScrollFrame>
+                    <Button name="GRM_AutoAdvertisingMemo_TextButton">
+                        <Size>
+                            <AbsDimension x="460" y="135"/>
+                        </Size>
+                        <Anchors>
+                            <Anchor point="TOPLEFT" relativeTo="GRM_AutoAdvertisingMemo_Text"/>
+                        </Anchors>
+                        <Scripts>
+                            <OnClick>
+                                GRM_AutoAdvertisingMemo_Text:SetFocus();
+                            </OnClick>
+                        </Scripts>
+                    </Button>
 								</Frames>
 							</Frame>
 
