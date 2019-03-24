@@ -24,9 +24,8 @@
   Recommend not using Gold per Deal ("Gold Log" and "Reserve (Player) Log" button under "Reserve Log" until it's properly translated. 
 
 **Known bugs:**
-* Clicking on "Instant Adv" in the Auto Advertise Tab while no message is entered, doesn't respond with an error message, outputs blank text in chat. 
-* Lua error upon looting a corpse can appear, probably due to Loot Log doesn't seem to show the text.
-* Loot log doesn't show text in window. Chat output still works. 
+* Lua error upon looting a corpse can appear, probably due to Loot Log doesn't seem to show the text. 
+* Clicking on "Instant Adv" in the Auto Advertise Tab while no message is entered, doesn't respond with an error message, outputs blank     text in chat. 
 
 **Things to do:**
 - [x] Fix the Auto Advertise Tab
