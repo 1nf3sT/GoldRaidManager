@@ -68,7 +68,7 @@
 
             <!-- 버전 텍스트 Version text -->
 			<Layer level="ARTWORK">
-				<FontString name="$parentText1" inherits="GRM_FontTemplate" text="GRM_TITLENAME">
+				<FontString name="$parentText1" inherits="GameFontNormal" text="GRM_TITLENAME">
 					<Anchors><Anchor point="TOP">
 						<Offset><AbsDimension x="0" y="-10"/></Offset>
 					</Anchor></Anchors>
@@ -77,7 +77,7 @@
 					<Anchors><Anchor point="TOPRIGHT" relativePoint="TOPRIGHT">
 						<Offset><AbsDimension x="-20" y="-45"/></Offset>
 					</Anchor></Anchors>
-					<Color r="0" g="1" b="0.5"/>
+					<Color r="0.5" g="0.5" b="0.5"/>
 				</FontString>
 				<FontString name="$parentText3" inherits="GameFontNormalSmall" text="GRM_AUTHOR">
 					<Anchors><Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">
@@ -822,7 +822,7 @@
 						</Backdrop>
 						<Layers>
 							<Layer>
-								<FontString name="GRM_ShortBriefText1" inherits="GRM_BriefFontTemplate" justifyH="LEFT" justifyV="TOP">
+								<FontString name="GRM_ShortBriefText1" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP">
 									<Size>
 										<AbsDimension x="220" y="350"/>
 									</Size>
@@ -851,17 +851,11 @@
 										<Size>
 											<AbsDimension x="205" y="300"/>
 										</Size>
-										<FontString inherits="SystemFont_Med1">
+										<FontString inherits="GameFontNormal">
                       <FontHeight>
                       	<AbsValue val="13"/>
                       </FontHeight>
-  										<Shadow>
-                  			<Offset>
-                  				<AbsDimension x="1" y="-1"/>
-                  			</Offset>
-                  			<Color r="0" g="0" b="0.6"/>
-                  		</Shadow>
-                  		<Color r="0" g="1" b="0.5"/>
+                  		<Color r="255" g="255" b="255"/>
                   	</FontString>
 										<Scripts>
 											<OnLoad>
@@ -960,7 +954,7 @@
 						</Backdrop>
 						<Layers>
 							<Layer>
-								<FontString name="GRM_LongBriefText" inherits="GRM_BriefFontTemplate" justifyH="LEFT" justifyV="TOP">
+								<FontString name="GRM_LongBriefText" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP">
 									<Size>
 										<AbsDimension x="240" y="350"/>
 									</Size>
@@ -1933,7 +1927,7 @@
 						</Backdrop>
 						<Layers>
 							<Layer>
-								<FontString name="GRM_NamedLootBriefText1" inherits="GRM_BriefFontTemplate" justifyH="LEFT" justifyV="TOP">
+								<FontString name="GRM_NamedLootBriefText1" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP">
 									<Size>
 										<AbsDimension x="255" y="350"/>
 									</Size>
@@ -1957,17 +1951,11 @@
 										<Size>
 											<AbsDimension x="255" y="350"/>
 										</Size>
-										<FontString inherits="ChatFontNormal">
+										<FontString inherits="GameFontNormal">
                       <FontHeight>
                       	<AbsValue val="13"/>
                       </FontHeight>
-  										<Shadow>
-                  			<Offset>
-                  				<AbsDimension x="1" y="-1"/>
-                  			</Offset>
-                  			<Color r="0" g="0" b="0.6"/>
-                  		</Shadow>
-                  		<Color r="0" g="1" b="0.5"/>
+                  		<Color r="255" g="255" b="255"/>
                   	</FontString>
 										<Scripts>
 											<OnLoad>
@@ -2043,7 +2031,7 @@
 						</Backdrop>
 						<Layers>
 							<Layer>
-								<FontString name="GRM_UserLootBriefText1" inherits="GRM_BriefFontTemplate" justifyH="LEFT" justifyV="TOP">
+								<FontString name="GRM_UserLootBriefText1" inherits="GameFontNormal" justifyH="LEFT" justifyV="TOP">
 									<Size>
 										<AbsDimension x="255" y="350"/>
 									</Size>
@@ -2067,17 +2055,11 @@
 										<Size>
 											<AbsDimension x="255" y="350"/>
 										</Size>
-										<FontString inherits="ChatFontNormal">
+										<FontString inherits="GameFontNormal">
                       <FontHeight>
                       	<AbsValue val="13"/>
                       </FontHeight>
-  										<Shadow>
-                  			<Offset>
-                  				<AbsDimension x="1" y="-1"/>
-                  			</Offset>
-                  			<Color r="0" g="0" b="0.6"/>
-                  		</Shadow>
-                  		<Color r="0" g="1" b="0.5"/>
+                  		<Color r="255" g="255" b="255"/>
                   	</FontString>
 										<Scripts>
 											<OnLoad>
