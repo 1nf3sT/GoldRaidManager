@@ -33,4 +33,4 @@ Get started by writing /grm in chat or click the minimap icon.
 - [x] Fix the Auto Advertise Tab
 - [ ] Fix the Instant Adv button to display error message
 - [ ] Figure out how Gold per Deal is supposed to be used, so it can be translated properly and documentated. 
-- [ ] Fix Loot Log window to display text. 
+- [x] Fix Loot Log window to display text. 
