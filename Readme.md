@@ -6,6 +6,7 @@
 - **Reserve Log Tab:** Reserve items for players.
 - **Loot Log Tab:** Display who bought the items and for what price. 
 - **Auto Advertise Tab:** Automaticly Advertise the run in up to 3 channels, option to set output interval.
+Get started by writing /grm in chat or click the minimap icon. 
 
 [Youtube video explaning how to use the addon](https://youtu.be/2FiXr4XQkHk).
 
