@@ -1456,12 +1456,12 @@ function GRM_PlayerSaySomething( msg, player )
 		removeItemLinkmsg = msg;
 	end
 	local gold = string.match( GRM_RemoveChatHead(removeItemLinkmsg), "(%d+)" );
-	local handsUp = string.match( removeItemLinkmsg, "손" ) or string.match( removeItemLinkmsg, "입" ) or string.match( removeItemLinkmsg, "저");
+	local handsUp = string.match( removeItemLinkmsg, "hand" ) or string.match( removeItemLinkmsg, "raisehand" ) or string.match( removeItemLinkmsg, "roll");
 
 	if ( GRM_Option["DiceParty"] == 1 ) then
 		if ( handsUp and (not GRM_DicePlayers[player]) ) then	
 			GRM_DicePlayers[player] = 0;
-			GRM_SystemChat( player .. " 님이 손드셨습니다." );
+			GRM_SystemChat( player .. " You raised your hand." );
 		end
 	elseif ( gold ) then
 		-- 일단 기존에 진행중이던 경매는 중지 Once the auction is in progress
@@ -1557,10 +1557,10 @@ function GRM_PlayerLootItem( text )
 	for color, item, name in string.gmatch(text, "|c(%x+)|Hitem:(%d+:%d+:%d+:%d+:%d+:%d+:%d+:%d+)|h%[(.-)%]|h|r") do 
 		local bCheck = (UnitInRaid("player") and ( GRM_ItemColors[color] >= GetLootThreshold() )) or (UnitInParty("party1") and ( GRM_ItemColors[color] >= 3 ));
 		if ( color and item and name and name ~= "" and bCheck ) then
-			local _,_,player = string.find( text, "(.+)님이" );
+			local _,_,player = string.find( text, "(.+)unspecified name" );
 			if ( not player ) then
-				GRM_Debug( true, "(.+)님이 에서 플레이어 못찾음");
-				_,_,player = string.find( text, "(.+)%|1이;가;" );
+				GRM_Debug( true, "(.+)Player not found");
+				_,_,player = string.find( text, "(.+)%|1person;end;" );
 				if ( not player ) then
 					player = UnitName("player");
 				end
@@ -2102,11 +2102,11 @@ end
 function GRM_BriefPriorGoldOnClick()
 --------------------------------------------------------------
 	if ( not GRM_RaceOption["GoldPerDeal"] ) then
-		GRM_SystemChat("뒷거래 1회 골드 내역이 비어있습니다");
+		GRM_SystemChat("Gold history is empty");
 	end
 
   if ( not GRM_PriorList) then
-    GRM_SystemChat("선입 내역이 없습니다.");
+    GRM_SystemChat("There is no history on previous deals");
     return;
   end
   
@@ -2165,16 +2165,16 @@ function GRM_BriefPriorGoldOnClick()
 	end
 
 	msg = msg .. msgtail .. "Total Gold Earned(".. MemberNum .. "players): " .. totalGold .. "gold\n";
-	msg = msg .. "1 명당 " .. string.format(GoldFormat, EachGold) .. "골\n";
+	msg = msg .. "Per player " .. string.format(GoldFormat, EachGold) .. "gold\n";
 
 	-- 무득골팟 아니면 파티당 골드 계산 Unincorporated gold pod or gold per party
 	if ( MemberNum > 5 ) then
 		if ( math.fmod(MemberNum,5) ~= 0 ) then
-			msg = msg .. "2 명당 " .. string.format(GoldFormat, EachGold*2) .. "골\n";
-			msg = msg .. "3 명당 " .. string.format(GoldFormat, EachGold*3) .. "골\n";
-			msg = msg .. "4 명당 " .. string.format(GoldFormat, EachGold*4) .. "골\n";
+			msg = msg .. "For every 2 people " .. string.format(GoldFormat, EachGold*2) .. "gold\n";
+			msg = msg .. "For every 3 people " .. string.format(GoldFormat, EachGold*3) .. "gold\n";
+			msg = msg .. "For every 4 people " .. string.format(GoldFormat, EachGold*4) .. "gold\n";
 		end
-		msg = msg .. "파티당 " .. string.format(GoldFormat, EachGold*5) .. "골\n";
+		msg = msg .. "Per group " .. string.format(GoldFormat, EachGold*5) .. "gold\n";
 	end
 	msg = msgHdr .. msg .. msgtail;
 	
@@ -2433,15 +2433,15 @@ function GRM_Auction_Start( index )
 	
 	if ( UnitInRaid("player") ) then
 		if ( GRM_Option["DiceParty"] == 1 ) then
-			GRM_RaidChat(itemname.." 필요하신분 손드세요");	
-			endMsg = "---------------- 마감.";
+			GRM_RaidChat(itemname.." Raise your hand if you need it.");	
+			endMsg = "---------------- deadline.";
 		else
 			GRM_RaidChat(itemname.." :: Starting auction from ["..GRM_GetUnicodeNumber(gold).."] gold.");
 			endMsg = itemname.." :: Auction Closed.";
 		end
 	elseif ( UnitInParty("party1") ) then
-		SendChatMessage(itemname.." 필요하신분 손드세요", "RAID_WARNING");
-		endMsg = "끝"; 
+		SendChatMessage(itemname.." Raise your hand if you need it", "RAID_WARNING");
+		endMsg = "end"; 
 	else 
 		GRM_SystemChat(itemname.." :: Starting auction from ["..gold.."] gold.");
 		endMsg = itemname.." :: Auction Closed.";
@@ -2539,15 +2539,15 @@ function GRM_OnFinishAuction( msg )
 				for dicePlayer in pairs(GRM_DicePlayers) do
 				  local groupnum = GRM_GetRaidRosterPartyNum(dicePlayer);
 				  if ( groupnum == 0 ) then
-					  GRM_RaidChat( dicePlayer.."님께 낙찰! 축하합니다." );
+					  GRM_RaidChat( dicePlayer.."won the auction, congratulations!" );
 					else
-					  GRM_RaidChat( "("..groupnum.."파티)"..dicePlayer.."님께 낙찰! 축하합니다." );
+					  GRM_RaidChat( "("..groupnum.."group)"..dicePlayer.."won the auction, congratulations!" );
 					end
 				end
 			elseif ( playerCount > 0 ) then
 				local dicePlayers = "";
 				for dicePlayer in pairs(GRM_DicePlayers) do
-					dicePlayers = dicePlayers..dicePlayer.."님 ";
+					dicePlayers = dicePlayers..dicePlayer.." ";
 				end
 				local diceCount = 0;
 				if ( GRM_Dice_Edit:GetText() ~= "" and tonumber(GRM_Dice_Edit:GetText()) > 0 ) then
@@ -2555,7 +2555,7 @@ function GRM_OnFinishAuction( msg )
 				else
 					diceCount = playerCount * 100;
 				end
-				GRM_RaidChat(dicePlayers.."주사위 ["..diceCount.."] 굴리세요.");
+				GRM_RaidChat(dicePlayers.."Rolls ["..diceCount.."]");
 			end
 		-- 골드 경매 팟인 경우 If gold auction pod
 		else
